@@ -24,6 +24,7 @@ namespace ComicDownloader.Repo
         #region properties
         private readonly string path;
         private ComicContext context;
+        private readonly Logger logger = Logger.Instance;
         #endregion
 
         #region methods
@@ -31,7 +32,7 @@ namespace ComicDownloader.Repo
         #region logging
         private void SendLogMessage(string msg, LogMessageStatus msgStatus)
         {
-            //TODO: lähetä lokiviesti
+            logger.Log(msgStatus, msg);
         }
 
         private void LogStorageEntriesCount(int count)
