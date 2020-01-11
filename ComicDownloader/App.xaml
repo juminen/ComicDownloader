@@ -1,8 +1,23 @@
-﻿<Application x:Class="ComicDownloader.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ComicDownloader">
+﻿<Application
+    x:Class="ComicDownloader.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ComicDownloader">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="pack://application:,,,/JMI.General.View.WPF;component/Resources/ControlTemplates.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/JMI.General.View.WPF;component/Resources/DataTemplates.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/JMI.General.View.WPF;component/Resources/Styles.xaml" />
+                <ResourceDictionary
+                    Source="UI/ViewTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush
+                x:Key="ApplicationColor"
+                Color="LightBlue" />
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

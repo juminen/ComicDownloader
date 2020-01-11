@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ComicDownloader.Repo
 {
-    class ComicRepository
+    public class ComicRepository
     {
         #region constructors
         public ComicRepository(string filePath)
@@ -217,6 +217,41 @@ namespace ComicDownloader.Repo
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Checks if there is comic with given name or url.
+        /// </summary>
+        /// <param name="name">Name of the comic</param>
+        /// <param name="url">Start url of the comic</param>
+        /// <returns>True if no duplicates where found</returns>
+        public async Task<DuplicateCheckResult> CheckForDuplicateComicAsync(string name, string url)
+        {
+            int count = 0;
+            DuplicateCheckResult result;
+            try
+            {
+                using (context = new ComicContext(path))
+                {
+                    count = await context.Comics
+                                    .Where(c => c.Name.Equals(name) || c.StartUrl.Equals(url))
+                                    .CountAsync();
+                }
+                if (count > 0)
+                {
+                    result = DuplicateCheckResult.DuplicatesFound;
+                }
+                else
+                {
+                    result = DuplicateCheckResult.DuplicatesNotFound;
+                }
+            }
+            catch (Exception e)
+            {
+                LogException(Operation.Load, "comics", e);
+                result = DuplicateCheckResult.DatabaseError;
+            }
+            return result;
         }
         #endregion
 

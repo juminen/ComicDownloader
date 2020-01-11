@@ -2,7 +2,7 @@
 
 namespace ComicDownloader.Repo
 {
-    class ComicPhotoDto : Identifier
+    public class ComicPhotoDto : Identifier
     {
         public Guid ComicGuid { get; set; }
         public ComicDto Comic { get; set; }

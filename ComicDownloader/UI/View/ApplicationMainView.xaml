@@ -1,0 +1,72 @@
+﻿<Window
+    x:Class="ComicDownloader.UI.View.ApplicationMainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pic="clr-namespace:JMI.General.View.WPF.IO.Picker;assembly=JMI.General.View.WPF"
+    xmlns:log="clr-namespace:JMI.General.View.WPF.Logging;assembly=JMI.General.View.WPF"
+    mc:Ignorable="d"
+    Title="{Binding WindowTitle}"
+    Top="{Binding WindowTop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    Left="{Binding WindowLeft, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    Height="{Binding WindowHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    Width="{Binding WindowWidht, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    WindowState="{Binding WindowState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="{Binding RowHeightTop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <RowDefinition
+                Height="auto" />
+            <RowDefinition
+                Height="{Binding RowHeightBottom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="0">
+            <!-- Database -->
+            <HeaderedContentControl
+                Template="{StaticResource HeaderControlBorderGridTemplate}">
+                <HeaderedContentControl.Header>
+                    <Label
+                        Content="Database" />
+                </HeaderedContentControl.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <pic:FilePicker
+                        Grid.Column="0"
+                        DataContext="{Binding DatabaseSelector}"
+                        SelectedPath="{Binding SelectedPath,
+                    Mode=TwoWay,
+                    UpdateSourceTrigger=PropertyChanged}" />
+                    <Button
+                        Grid.Column="1"
+                        Content="Connect"
+                        Command="{Binding ConnectToDatabaseCommand}" />
+                </Grid>
+            </HeaderedContentControl>
+            <!-- Workspace -->
+            <ContentControl
+                Content="{Binding Workspace, Mode=OneWay}" />
+            <!--<ContentControl
+            Grid.Row="0"
+            Content="{Binding CurrentView}" />-->
+        </StackPanel>
+        <GridSplitter
+            Grid.Row="1"
+            Height="5"
+            ResizeDirection="Rows"
+            ResizeBehavior="PreviousAndNext"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            ShowsPreview="True" />
+        <log:LogView
+            Grid.Row="2"
+            DataContext="{Binding Log}" />
+    </Grid>
+</Window>

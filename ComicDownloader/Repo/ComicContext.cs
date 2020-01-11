@@ -56,7 +56,7 @@ namespace ComicDownloader.Repo
                 .HasColumnName(TableNames.ComicTable.Columns.Name);
 
             modelBuilder.Entity<ComicDto>()
-                .Property(x => x.Url)
+                .Property(x => x.StartUrl)
                 .HasColumnName(TableNames.ComicTable.Columns.Url);
 
             modelBuilder.Entity<ComicDto>()
