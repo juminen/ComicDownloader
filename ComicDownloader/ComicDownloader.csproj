@@ -175,8 +175,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\Comic.cs" />
+    <Compile Include="Model\ComicCollection.cs" />
     <Compile Include="Model\ComicCreator.cs" />
+    <Compile Include="Model\ComicPhoto.cs" />
     <Compile Include="Model\DtoConvert\ComicDtoConverter.cs" />
+    <Compile Include="Model\DtoConvert\ComicPhotoDtoConverter.cs" />
+    <Compile Include="Model\Identifier.cs" />
     <Compile Include="Model\Validators\ComicValidator.cs" />
     <Compile Include="Repo\ComicContext.cs" />
     <Compile Include="Repo\ComicDto.cs" />

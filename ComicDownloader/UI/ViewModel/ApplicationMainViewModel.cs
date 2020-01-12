@@ -17,6 +17,7 @@ namespace ComicDownloader.UI.ViewModel
             Logger logger = Logger.Instance;
             logger.Log(LogFactory.CreateNormalMessage("Application started."));
             DatabaseSelector = new OpenSingleFilePickerViewModel("Current database", "...");
+            DatabaseSelector.FileFilters = JMI.General.IO.FileFilters.SQLite.Filter;
             ConnectToDatabase();
             //TODO: testing
             ForTesting();

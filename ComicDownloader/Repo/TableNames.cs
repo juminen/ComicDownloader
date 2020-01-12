@@ -27,10 +27,10 @@
             public static class Columns
             {
                 public static string Guid { get { return Common.Guid; } }
-                public static string ReleaseDate { get { return "ReleaseDate"; } }
+                public static string PublishDate { get { return "PublishDate"; } }
                 public static string DownloadDate { get { return "DownloadDate"; } }
                 public static string Status { get { return "Status"; } }
-                public static string FilePath { get { return "FilePath"; } }
+                public static string RelativeFilePath { get { return "RelativeFilePath"; } }
                 public static string Url { get { return "Url"; } }
                 public static string ComicGuid { get { return "ComicGuid"; } }
             }

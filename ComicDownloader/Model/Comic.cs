@@ -1,29 +1,23 @@
-﻿using JMI.General;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ComicDownloader.Model
 {
-    public class Comic : ObservableObject
+    public class Comic : Identifier
     {
         #region constructors
-        public Comic()
+        public Comic() : base()
         {
 
         }
 
-        public Comic(Guid guid) //: base(guid)
+        public Comic(Guid guid) : base(guid)
         {
 
         }
         #endregion
 
         #region properties
-        //TODO: lisää Guid
         private string name;
         /// <summary>
         /// Name of the comic
@@ -31,7 +25,11 @@ namespace ComicDownloader.Model
         public string Name
         {
             get { return name; }
-            set { SetProperty(ref name, value); }
+            set
+            {
+                SetProperty(ref name, value);
+                OnPropertyChanged(nameof(DisplayText));
+            }
         }
 
         private string startUrl;
@@ -63,6 +61,13 @@ namespace ComicDownloader.Model
             get { return savingLocation; }
             set { SetProperty(ref savingLocation, value); }
         }
+
+        /// <summary>
+        /// Returns <see cref="Name"/>
+        /// </summary>
+        public override string DisplayText => Name;
+
+        public List<ComicPhoto> Photos { get; set; } = new List<ComicPhoto>();
         #endregion
 
         #region methods
@@ -95,6 +100,11 @@ namespace ComicDownloader.Model
             s = s.Replace('Ö', 'O');
             s = s.Replace(" ", "_");
             return s;
+        }
+
+        public override void Dispose()
+        {
+            Photos.ForEach(p => p.Dispose());
         }
 
         ///// <summary>

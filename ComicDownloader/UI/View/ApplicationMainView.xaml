@@ -41,9 +41,11 @@
                     <pic:FilePicker
                         Grid.Column="0"
                         DataContext="{Binding DatabaseSelector}"
+                        FileFilters="{Binding FileFilters,
+                        Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedPath="{Binding SelectedPath,
-                    Mode=TwoWay,
-                    UpdateSourceTrigger=PropertyChanged}" />
+                        Mode=TwoWay,
+                        UpdateSourceTrigger=PropertyChanged}" />
                     <Button
                         Grid.Column="1"
                         Content="Connect"

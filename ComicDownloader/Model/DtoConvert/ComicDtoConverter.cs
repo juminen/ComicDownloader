@@ -16,7 +16,7 @@ namespace ComicDownloader.Model.DtoConvert
             };
             if (convertChildren)
             {
-                //TODO: item.Photos.AddRange(ComicPhotoDtoConverter.ConvertDtosToItems(dto.Photos, item));
+                item.Photos.AddRange(ComicPhotoDtoConverter.ConvertDtosToItems(dto.Photos, item));
             }
             return item;
         }
@@ -35,7 +35,7 @@ namespace ComicDownloader.Model.DtoConvert
         {
             ComicDto dto = new ComicDto
             {
-                //TODO: UniqueIdentifier = item.GetGuid(),
+                UniqueIdentifier = item.GetGuid(),
                 Name = item.Name,
                 StartUrl = item.StartUrl,
                 LastDownloadDate = item.LastDownloadDate,

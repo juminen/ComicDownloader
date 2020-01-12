@@ -81,8 +81,8 @@ namespace ComicDownloader.Repo
                 .HasKey(x => x.UniqueIdentifier);
 
             modelBuilder.Entity<ComicPhotoDto>()
-                .Property(x => x.ReleaseDate)
-                .HasColumnName(TableNames.ComicPhotoTable.Columns.ReleaseDate);
+                .Property(x => x.PublishDate)
+                .HasColumnName(TableNames.ComicPhotoTable.Columns.PublishDate);
 
             modelBuilder.Entity<ComicPhotoDto>()
                 .Property(x => x.DownloadDate)
@@ -93,8 +93,8 @@ namespace ComicDownloader.Repo
                 .HasColumnName(TableNames.ComicPhotoTable.Columns.Status);
 
             modelBuilder.Entity<ComicPhotoDto>()
-                .Property(x => x.FilePath)
-                .HasColumnName(TableNames.ComicPhotoTable.Columns.FilePath);
+                .Property(x => x.RelativeFilePath)
+                .HasColumnName(TableNames.ComicPhotoTable.Columns.RelativeFilePath);
 
             modelBuilder.Entity<ComicPhotoDto>()
                 .Property(x => x.Url)
