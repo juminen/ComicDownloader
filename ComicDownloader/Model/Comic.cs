@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ComicDownloader.Model
 {
@@ -100,6 +101,17 @@ namespace ComicDownloader.Model
             s = s.Replace('Ö', 'O');
             s = s.Replace(" ", "_");
             return s;
+        }
+
+        /// <summary>
+        /// Returns count of photos for given date (used to check ih there are more than one photo per day)
+        /// </summary>
+        /// <param name="publishDate">Publish date of <see cref="ComicPhoto"/></param>
+        /// <returns>integer</returns>
+        public int GetPhotoCountByRealeaseDate(DateTime publishDate)
+        {
+            int count = Photos.Count(x => x.PublishDate.Equals(publishDate));
+            return count;
         }
 
         public override void Dispose()

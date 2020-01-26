@@ -24,7 +24,7 @@ namespace ComicDownloader.Repo
         #region properties
         private readonly string path;
         private ComicContext context;
-        private readonly Logger logger = Logger.Instance;
+        private readonly Logger logger = SingletonLogger.Instance;
         #endregion
 
         #region methods
@@ -77,7 +77,7 @@ namespace ComicDownloader.Repo
         #endregion
 
         #region comic
-        public async Task<IEnumerable<ComicDto>> LoadComicsAsync(bool includePhotos)
+        public async Task<IList<ComicDto>> LoadComicsAsync(bool includePhotos)
         {
             List<ComicDto> list = new List<ComicDto>();
 
@@ -149,7 +149,7 @@ namespace ComicDownloader.Repo
             return true;
         }
 
-        public async Task<bool> UpdateComicsAsync(IEnumerable<ComicDto> items)
+        public async Task<bool> UpdateComicsAsync(IList<ComicDto> items)
         {
             try
             {
@@ -199,7 +199,7 @@ namespace ComicDownloader.Repo
             return true;
         }
 
-        public async Task<bool> DeleteComicsAsync(IEnumerable<ComicDto> items)
+        public async Task<bool> DeleteComicsAsync(IList<ComicDto> items)
         {
             try
             {
@@ -256,7 +256,7 @@ namespace ComicDownloader.Repo
         #endregion
 
         #region photo
-        public async Task<bool> InsertPhotosAsync(IEnumerable<ComicPhotoDto> items)
+        public async Task<bool> InsertPhotosAsync(IList<ComicPhotoDto> items)
         {
             try
             {
@@ -276,7 +276,7 @@ namespace ComicDownloader.Repo
             return true;
         }
 
-        public async Task<bool> UpdatePhotosAsync(IEnumerable<ComicPhotoDto> items)
+        public async Task<bool> UpdatePhotosAsync(IList<ComicPhotoDto> items)
         {
             try
             {
@@ -326,7 +326,7 @@ namespace ComicDownloader.Repo
             return true;
         }
 
-        public async Task<bool> DeletePhotosAsync(IEnumerable<ComicPhotoDto> items)
+        public async Task<bool> DeletePhotosAsync(IList<ComicPhotoDto> items)
         {
             try
             {

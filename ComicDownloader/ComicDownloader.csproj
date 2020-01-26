@@ -141,6 +141,7 @@
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -177,7 +178,12 @@
     <Compile Include="Model\Comic.cs" />
     <Compile Include="Model\ComicCollection.cs" />
     <Compile Include="Model\ComicCreator.cs" />
+    <Compile Include="Model\ComicDataCrawler.cs" />
+    <Compile Include="Model\ComicPhotoCollection.cs" />
+    <Compile Include="Model\ComicWorkItem.cs" />
+    <Compile Include="Model\ComicManager.cs" />
     <Compile Include="Model\ComicPhoto.cs" />
+    <Compile Include="Model\ComicPhotoDownloader.cs" />
     <Compile Include="Model\DtoConvert\ComicDtoConverter.cs" />
     <Compile Include="Model\DtoConvert\ComicPhotoDtoConverter.cs" />
     <Compile Include="Model\Identifier.cs" />

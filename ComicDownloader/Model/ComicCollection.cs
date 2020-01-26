@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ComicDownloader.Model
 {
+    /// <summary>
+    /// <see cref="SelectionCollection{T}"/> of <see cref="Comic"/>
+    /// </summary>
     public class ComicCollection : SelectionCollection<Comic>
     {
         #region constructors
@@ -20,7 +23,7 @@ namespace ComicDownloader.Model
 
         #region properties
         private ComicRepository repository;
-        private readonly Logger logger = Logger.Instance;
+        private readonly Logger logger = SingletonLogger.Instance;
         #endregion
 
         #region methods

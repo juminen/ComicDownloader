@@ -14,10 +14,12 @@ namespace ComicDownloader.UI.ViewModel
         {
             WindowTitle = "Comic downloader";
             //TODO: ikkunan asetuksien lataus muistista
-            Logger logger = Logger.Instance;
+            Logger logger = SingletonLogger.Instance;
             logger.Log(LogFactory.CreateNormalMessage("Application started."));
-            DatabaseSelector = new OpenSingleFilePickerViewModel("Current database", "...");
-            DatabaseSelector.FileFilters = JMI.General.IO.FileFilters.SQLite.Filter;
+            DatabaseSelector = new OpenSingleFilePickerViewModel("Current database", "...")
+            {
+                FileFilters = JMI.General.IO.FileFilters.SQLite.Filter
+            };
             ConnectToDatabase();
             //TODO: testing
             ForTesting();
