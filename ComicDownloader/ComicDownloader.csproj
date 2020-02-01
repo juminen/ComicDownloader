@@ -196,9 +196,17 @@
     <Compile Include="Repo\Identifier.cs" />
     <Compile Include="Repo\TableNames.cs" />
     <Compile Include="UI\ViewModel\ApplicationMainViewModel.cs" />
+    <Compile Include="UI\ViewModel\ComicListItemViewModel.cs" />
+    <Compile Include="UI\ViewModel\ComicListViewModel.cs" />
     <Compile Include="UI\ViewModel\CreateNewComicViewModel.cs" />
     <Compile Include="UI\View\ApplicationMainView.xaml.cs">
       <DependentUpon>ApplicationMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\ComicListItemView.xaml.cs">
+      <DependentUpon>ComicListItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\ComicListView.xaml.cs">
+      <DependentUpon>ComicListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\View\CreateNewComicView.xaml.cs">
       <DependentUpon>CreateNewComicView.xaml</DependentUpon>
@@ -238,6 +246,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\View\ApplicationMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\ComicListItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\ComicListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

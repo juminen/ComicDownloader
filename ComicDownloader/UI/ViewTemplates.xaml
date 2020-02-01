@@ -9,4 +9,12 @@
         DataType="{x:Type vm:CreateNewComicViewModel}">
         <v:CreateNewComicView />
     </DataTemplate>
+    <DataTemplate
+        DataType="{x:Type vm:ComicListItemViewModel}">
+        <v:ComicListItemView />
+    </DataTemplate>
+    <DataTemplate
+        DataType="{x:Type vm:ComicListViewModel}">
+        <v:ComicListView />
+    </DataTemplate>
 </ResourceDictionary>

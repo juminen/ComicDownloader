@@ -86,6 +86,12 @@ namespace ComicDownloader.UI.ViewModel
             WindowLeft = WindowWidht / 2;
 
             //WindowState = WindowState.Maximized;
+            //TestCreateNewComic();
+            TestComicListView();
+        }
+
+        private void TestCreateNewComic()
+        {
             ComicCreator comicCreator = new ComicCreator(new Repo.ComicRepository(DatabaseSelector.SelectedPath));
             CreateNewComicViewModel vm = new CreateNewComicViewModel(comicCreator)
             {
@@ -94,6 +100,14 @@ namespace ComicDownloader.UI.ViewModel
                 StartUrl = @"http://www.hs.fi/fingerpori/"
             };
 
+            Workspace = vm;
+        }
+
+        private void TestComicListView()
+        {
+            ComicManager manager = new ComicManager(DatabaseSelector.SelectedPath);
+            ComicListViewModel vm = new ComicListViewModel(manager.ComicsCollection);
+            manager.GetComicsFromRepositoryAsync();
             Workspace = vm;
         }
         #endregion
