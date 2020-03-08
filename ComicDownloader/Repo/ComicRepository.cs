@@ -253,6 +253,44 @@ namespace ComicDownloader.Repo
             }
             return result;
         }
+
+        public async Task<DuplicateCheckResult> CheckForUpdateDuplicatesAsync(ComicDto comic)
+        {
+            int count1 = 0;
+            int count2 = 0;
+            DuplicateCheckResult result;
+            try
+            {
+                using (context = new ComicContext(path))
+                {
+                    count1 = await context.Comics
+                                    .Where(c => c.Name.Equals(comic.Name) &&
+                                           !c.UniqueIdentifier.Equals(comic.UniqueIdentifier))
+                                    .CountAsync();
+
+                    count1 = await context.Comics
+                                    .Where(c => c.StartUrl.Equals(comic.StartUrl) &&
+                                           !c.UniqueIdentifier.Equals(comic.UniqueIdentifier))
+                                    .CountAsync();
+
+
+                }
+                if (count1 + count2 > 0)
+                {
+                    result = DuplicateCheckResult.DuplicatesFound;
+                }
+                else
+                {
+                    result = DuplicateCheckResult.DuplicatesNotFound;
+                }
+            }
+            catch (Exception e)
+            {
+                LogException(Operation.Load, "comics", e);
+                result = DuplicateCheckResult.DatabaseError;
+            }
+            return result;
+        }
         #endregion
 
         #region photo

@@ -1,5 +1,4 @@
-﻿using JMI.General.Logging;
-using System;
+﻿using System;
 
 namespace ComicDownloader.Model
 {
@@ -13,21 +12,14 @@ namespace ComicDownloader.Model
 
             Comic = comic ?? throw new ArgumentNullException(nameof(comic) + " can not be null");
             Photos = new ComicPhotoCollection();
-            Log = new ProgressLogger() { Name = comic.Name };
-            //Progress<ILogMessage> progress = new Progress<ILogMessage>();
-            //progress.ProgressChanged += OnProgressChanged;
             Crawler = new ComicDataCrawler(ref comic, Photos, Log.Progress);
+            Log = new DownloadLogger(Crawler) { Name = comic.Name };
             Photos = new ComicPhotoCollection();
         }
 
         public Comic Comic { get; private set; }
         public ComicDataCrawler Crawler { get; private set; }
-        public ProgressLogger Log { get; private set; }
+        public DownloadLogger Log { get; private set; }
         public ComicPhotoCollection Photos { get; private set; }
-
-        //private void OnProgressChanged(object sender, ILogMessage e)
-        //{
-        //    Log.Log(e);
-        //}
     }
 }

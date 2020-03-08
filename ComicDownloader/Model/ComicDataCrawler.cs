@@ -11,7 +11,7 @@ namespace ComicDownloader.Model
     /// <summary>
     /// Class for crawling data from web page
     /// </summary>
-    class ComicDataCrawler
+    class ComicDataCrawler : IIsFinished
     {
         #region constructors
         /// <summary>
@@ -29,6 +29,7 @@ namespace ComicDownloader.Model
             this.comic = comic ?? throw new ArgumentNullException(nameof(comic));
             comicPhotos = containerForPhotos ?? throw new ArgumentNullException(nameof(containerForPhotos));
             progressReporter = progress ?? throw new ArgumentNullException(nameof(progress) + " can not be null");
+            IsFinished = false;
         }
         #endregion
 
@@ -39,6 +40,20 @@ namespace ComicDownloader.Model
         //private BlockingCollection<ComicPhoto> comicPhotos;
         private ComicPhotoCollection comicPhotos;
         private IProgress<ILogMessage> progressReporter;
+
+        private bool isFinished;
+        public bool IsFinished
+        {
+            get { return isFinished; }
+            private set
+            {
+                isFinished = value;
+                if (isFinished)
+                {
+                    Finished?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
         #endregion
 
         #region methods
@@ -49,10 +64,12 @@ namespace ComicDownloader.Model
 
         public async Task DownloadDataAsync()
         {
+            IsFinished = false;
             //Download main site
             bool mainsiteDownloaded = await GetSiteContentAsync(comic.StartUrl);
             if (!mainsiteDownloaded)
             {
+                IsFinished = true;
                 return;
             }
 
@@ -60,6 +77,7 @@ namespace ComicDownloader.Model
             bool startUriFound = GetStartUri(siteContent);
             if (!startUriFound)
             {
+                IsFinished = true;
                 return;
             }
 
@@ -68,10 +86,12 @@ namespace ComicDownloader.Model
                 bool siteDownloaded = await GetSiteContentAsync(currentAddress);
                 if (!siteDownloaded)
                 {
+                    IsFinished = true;
                     return;
                 }
                 if (!GetComicPhotoInfo())
                 {
+                    IsFinished = true;
                     return;
                 }
             }
@@ -334,6 +354,7 @@ namespace ComicDownloader.Model
         #endregion
 
         #region events
+        public event EventHandler Finished;
         #endregion
 
         #region event handlers

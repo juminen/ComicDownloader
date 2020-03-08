@@ -48,7 +48,7 @@ namespace ComicDownloader.Model
 
         private async Task<bool> DownloadImageDataAsync()
         {
-            string s = $"Downloading...";
+            string s = $"Downloading '{ photo.DisplayText }'...";
             ReportProgress(LogFactory.CreateNormalMessage(s));
             using (WebClient wc = new WebClient())
             {
@@ -58,13 +58,13 @@ namespace ComicDownloader.Model
                 }
                 catch (Exception ex)
                 {
-                    s = $"Download failed: {ex.Message}";
+                    s = $"Download '{ photo.DisplayText }' failed: {ex.Message}";
                     photo.SetDownloadDateToNow();
                     ReportProgress(LogFactory.CreateWarningMessage(s));
                     return false;
                 }
             }
-            s = $"Image downloaded for saving to file.";
+            s = $"Image '{ photo.DisplayText }' downloaded for saving to file.";
             photo.SetDownloadDateToNow();
             ReportProgress(LogFactory.CreateNormalMessage(s));
             return true;
@@ -72,7 +72,7 @@ namespace ComicDownloader.Model
 
         private void SaveImageData()
         {
-            string s = $"Saving...";
+            string s = $"Saving to '{ photo.AbsoluteFilePath }'...";
             ReportProgress(LogFactory.CreateNormalMessage(s));
             using (MemoryStream stream = new MemoryStream(imageData))
             {
@@ -83,12 +83,12 @@ namespace ComicDownloader.Model
                 }
                 catch (Exception ex)
                 {
-                    s = $"Saving failed: {ex.Message}";
+                    s = $"Saving to '{ photo.AbsoluteFilePath }' failed: {ex.Message}";
                     ReportProgress(LogFactory.CreateWarningMessage(s));
                     return;
                 }
             }
-            s = $"Image saved.";
+            s = $"Image '{ photo.AbsoluteFilePath }' saved.";
             ReportProgress(LogFactory.CreateNormalMessage(s));
             photo.Status = "image downloaded";
         }
@@ -100,7 +100,7 @@ namespace ComicDownloader.Model
         {
             if (File.Exists(photo.AbsoluteFilePath))
             {
-                string s = $"Image file was already in the directory.";
+                string s = $"Image file '{ photo.AbsoluteFilePath }' was already in the directory.";
                 photo.SetDownloadDateToNow();
                 ReportProgress(LogFactory.CreateWarningMessage(s));
                 return;

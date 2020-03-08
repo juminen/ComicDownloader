@@ -19,6 +19,8 @@ namespace ComicDownloader.Model
         #endregion
 
         #region properties
+        private Comic memento;
+
         private string name;
         /// <summary>
         /// Name of the comic
@@ -112,6 +114,28 @@ namespace ComicDownloader.Model
         {
             int count = Photos.Count(x => x.PublishDate.Equals(publishDate));
             return count;
+        }
+
+        public void CreateMemento()
+        {
+            memento = new Comic(GetGuid())
+            {
+                Name = name,
+                StartUrl = startUrl,
+                LastDownloadDate = lastDownloadDate,
+                SavingLocation = savingLocation
+            };
+        }
+
+        public void BackupFromMemento()
+        {
+            if (memento != null)
+            {
+                Name = memento.Name;
+                LastDownloadDate = memento.LastDownloadDate;
+                StartUrl = memento.StartUrl;
+                SavingLocation = memento.SavingLocation;
+            }
         }
 
         public override void Dispose()

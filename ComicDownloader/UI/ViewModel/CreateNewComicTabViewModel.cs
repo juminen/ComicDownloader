@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ComicDownloader.UI.ViewModel
 {
-    public class CreateNewComicViewModel : CreateNewItemViewModel, IDisposable
+    public class CreateNewComicTabViewModel : CreateNewItemTabViewModel
     {
         #region constructors
 
-        public CreateNewComicViewModel(ComicCreator comicCreator)
+        public CreateNewComicTabViewModel(ComicCreator comicCreator)
         {
             creator = comicCreator ?? throw new ArgumentNullException(nameof(comicCreator) + " can not be null");
             creator.StatusChanged += OnCreatorStatusChanged;
@@ -18,6 +18,7 @@ namespace ComicDownloader.UI.ViewModel
             LastDownloadDate = DateTime.Today;
             SavingLocation = DefaultPickers.DirectoryPicker;
             Title = "Create new comic";
+            AllowClose = true;
             //TODO: poista testauksen jälkeen
             SavingLocation.SelectedPath = @"F:\Kuvat\0_testi\testi";
         }
@@ -95,8 +96,12 @@ namespace ComicDownloader.UI.ViewModel
         #region methods
         protected override async Task CreateItemAsync()
         {
-            await creator.CreateComicAsync(
+            bool result = await creator.CreateComicAsync(
                 Name, StartUrl, SavingLocation.SelectedPath, LastDownloadDate);
+            if (result)
+            {
+                RequestClose();
+            }
         }
 
         public override void Dispose()

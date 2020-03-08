@@ -21,7 +21,9 @@ namespace ComicDownloader.Model
             ComicsCollection = new ComicCollection(repository);
             PhotosCollection = new ComicPhotoCollection();
             WorkPhotos = new ComicPhotoCollection();
-            DownloadLogs = new ObservableCollection<Logger>();
+            DownloadLogs = new ObservableCollection<DownloadLogger>();
+            ComicCreator = new ComicCreator(repository);
+            ComicUpdater = new ComicUpdater(repository);
             //LoadSettings();
             //TODO: testiä varten
             //GetComicsFromDatabase();
@@ -53,7 +55,10 @@ namespace ComicDownloader.Model
         /// <summary>
         /// Collection to hold all logs used during download
         /// </summary>
-        public ObservableCollection<Logger> DownloadLogs { get; private set; }
+        public ObservableCollection<DownloadLogger> DownloadLogs { get; private set; }
+
+        public ComicCreator ComicCreator { get; private set; }
+        public ComicUpdater ComicUpdater { get; private set; }
 
         private bool downloadComicData;
         /// <summary>
@@ -131,6 +136,8 @@ namespace ComicDownloader.Model
             }
 
             repository = new ComicRepository(pathToRepository);
+            ComicCreator = new ComicCreator(repository);
+            ComicUpdater = new ComicUpdater(repository);
             await GetComicsFromRepositoryAsync();
             return true;
         }
@@ -149,7 +156,7 @@ namespace ComicDownloader.Model
 
         public async Task Download()
         {
-            //check if dowload is already running
+            //check if download is already running
             if (DownloadRunning)
             {
                 return;
@@ -334,8 +341,10 @@ namespace ComicDownloader.Model
                 MaxDegreeOfParallelism = Environment.ProcessorCount
             };
 
+            FinishedItem finishedItem = new FinishedItem();
+
             List<ComicPhotoDownloader> downloaders = new List<ComicPhotoDownloader>();
-            ProgressLogger imageDownloadLog = new ProgressLogger() { Name = "Image Dowload" };
+            DownloadLogger imageDownloadLog = new DownloadLogger(finishedItem) { Name = "Image Dowload" };
             DownloadLogs.Add(imageDownloadLog);
 
             foreach (ComicPhoto cp in WorkPhotos.AllItems)
@@ -359,6 +368,7 @@ namespace ComicDownloader.Model
                 msg = $"Downloading images canceled.";
                 logger.Log(LogFactory.CreateNormalMessage(msg));
                 photoDownloadSucceeded = true;
+                finishedItem.IsFinished = true;
                 return;
             }
             catch (Exception ex)
@@ -366,10 +376,12 @@ namespace ComicDownloader.Model
                 msg = $"Downloading images failed:\n'{ex.Message}'.";
                 logger.Log(LogFactory.CreateErrorMessage(msg));
                 photoDownloadSucceeded = false;
+                finishedItem.IsFinished = true;
                 return;
             }
             logger.Log(LogFactory.CreateNormalMessage("Images downloaded."));
             photoDownloadSucceeded = true;
+            finishedItem.IsFinished = true;
         }
 
         private async Task<bool> UpdateWorkPhotosToRepository()
@@ -380,6 +392,11 @@ namespace ComicDownloader.Model
                 );
 
             return result;
+        }
+        
+        public void AddCheckedPhotosToWorkPhotos()
+        {
+            WorkPhotos.AddRange(PhotosCollection.GetCheckedItemsAsIEnumerable());
         }
         #endregion
 

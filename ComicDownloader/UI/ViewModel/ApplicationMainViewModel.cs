@@ -87,13 +87,14 @@ namespace ComicDownloader.UI.ViewModel
 
             //WindowState = WindowState.Maximized;
             //TestCreateNewComic();
-            TestComicListView();
+            //TestComicListView();
+            TestComicWorkspace();
         }
 
         private void TestCreateNewComic()
         {
             ComicCreator comicCreator = new ComicCreator(new Repo.ComicRepository(DatabaseSelector.SelectedPath));
-            CreateNewComicViewModel vm = new CreateNewComicViewModel(comicCreator)
+            CreateNewComicTabViewModel vm = new CreateNewComicTabViewModel(comicCreator)
             {
                 Name = "Fingerpori",
                 //SavingLocation = @"F:\Kuvat\0_testi\testi",
@@ -107,6 +108,14 @@ namespace ComicDownloader.UI.ViewModel
         {
             ComicManager manager = new ComicManager(DatabaseSelector.SelectedPath);
             ComicListViewModel vm = new ComicListViewModel(manager.ComicsCollection);
+            manager.GetComicsFromRepositoryAsync();
+            Workspace = vm;
+        }
+
+        private void TestComicWorkspace()
+        {
+            ComicManager manager = new ComicManager(DatabaseSelector.SelectedPath);
+            ComicWorkspaceViewModel vm = new ComicWorkspaceViewModel(manager);
             manager.GetComicsFromRepositoryAsync();
             Workspace = vm;
         }

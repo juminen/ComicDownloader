@@ -180,13 +180,17 @@
     <Compile Include="Model\ComicCreator.cs" />
     <Compile Include="Model\ComicDataCrawler.cs" />
     <Compile Include="Model\ComicPhotoCollection.cs" />
+    <Compile Include="Model\ComicUpdater.cs" />
     <Compile Include="Model\ComicWorkItem.cs" />
     <Compile Include="Model\ComicManager.cs" />
     <Compile Include="Model\ComicPhoto.cs" />
     <Compile Include="Model\ComicPhotoDownloader.cs" />
+    <Compile Include="Model\DownloadLogger.cs" />
     <Compile Include="Model\DtoConvert\ComicDtoConverter.cs" />
     <Compile Include="Model\DtoConvert\ComicPhotoDtoConverter.cs" />
     <Compile Include="Model\Identifier.cs" />
+    <Compile Include="Model\IIsFinished.cs" />
+    <Compile Include="Model\FinishedItem.cs" />
     <Compile Include="Model\Validators\ComicValidator.cs" />
     <Compile Include="Repo\ComicContext.cs" />
     <Compile Include="Repo\ComicDto.cs" />
@@ -198,9 +202,17 @@
     <Compile Include="UI\ViewModel\ApplicationMainViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicListItemViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicListViewModel.cs" />
-    <Compile Include="UI\ViewModel\CreateNewComicViewModel.cs" />
+    <Compile Include="UI\ViewModel\ComicPhotoListItemViewModel.cs" />
+    <Compile Include="UI\ViewModel\ComicPhotoListViewModel.cs" />
+    <Compile Include="UI\ViewModel\ComicWorkspaceViewModel.cs" />
+    <Compile Include="UI\ViewModel\CreateNewComicTabViewModel.cs" />
+    <Compile Include="UI\ViewModel\DowloadLogTabViewModel.cs" />
+    <Compile Include="UI\ViewModel\EditComicTabViewModel.cs" />
     <Compile Include="UI\View\ApplicationMainView.xaml.cs">
       <DependentUpon>ApplicationMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\ComicDetailsView.xaml.cs">
+      <DependentUpon>ComicDetailsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\View\ComicListItemView.xaml.cs">
       <DependentUpon>ComicListItemView.xaml</DependentUpon>
@@ -208,8 +220,17 @@
     <Compile Include="UI\View\ComicListView.xaml.cs">
       <DependentUpon>ComicListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\View\ComicPhotoListView.xaml.cs">
+      <DependentUpon>ComicPhotoListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\ComicWorkspaceView.xaml.cs">
+      <DependentUpon>ComicWorkspaceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\View\CreateNewComicView.xaml.cs">
       <DependentUpon>CreateNewComicView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\EditComicView.xaml.cs">
+      <DependentUpon>EditComicView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -249,6 +270,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\View\ComicDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\View\ComicListItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -257,7 +282,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\View\ComicPhotoListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\ComicWorkspaceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\View\CreateNewComicView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\EditComicView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
