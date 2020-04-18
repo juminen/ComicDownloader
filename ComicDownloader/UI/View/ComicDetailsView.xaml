@@ -474,7 +474,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Grid.Row="3"
-            DataContext="{Binding SavingLocation}"
+            DataContext="{Binding SavingLocationPicker}"
             Label="Saving location"
             SelectedPath="{Binding SelectedPath,
             Mode=TwoWay,
@@ -484,7 +484,7 @@
             Grid.Row="4"
             Grid.ColumnSpan="2"
             Foreground="Red"
-            Text="{Binding Status,
+            Text="{Binding ValidationResult,
             Mode=OneWay,
             UpdateSourceTrigger=PropertyChanged}" />
     </Grid>

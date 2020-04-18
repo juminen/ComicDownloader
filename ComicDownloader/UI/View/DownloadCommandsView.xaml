@@ -1,0 +1,41 @@
+﻿<UserControl
+    x:Class="ComicDownloader.UI.View.DownloadCommandsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ComicDownloader.UI.View"
+    xmlns:commands="clr-namespace:JMI.General.View.WPF.Commands;assembly=JMI.General.View.WPF"
+    mc:Ignorable="d">
+    <StackPanel>
+        <commands:CommandGroupButtonListView />
+        <HeaderedContentControl
+            Template="{StaticResource HeaderControlBorderGridTemplate}">
+            <HeaderedContentControl.Header>
+                <Label
+                    Content="Download" />
+            </HeaderedContentControl.Header>
+            <HeaderedContentControl.Content>
+                <StackPanel>
+                    <CheckBox
+                        Content="Comic infos"
+                        IsChecked="{Binding DownloadComicInfos, Mode=TwoWay, 
+                                        UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox
+                        Content="Image files"
+                        IsChecked="{Binding DownloadImageFiles, Mode=TwoWay, 
+                                        UpdateSourceTrigger=PropertyChanged}" />
+                    <Button
+                        Content="Download all"
+                        Command="{Binding DownloadAllCommand}" />
+                    <Button
+                        Content="Download checked"
+                        Command="{Binding DownloadCheckedCommand}" />
+                    <Button
+                        Content="Cancel download"
+                        Command="{Binding CancelDownloadCommand}" />
+                </StackPanel>
+            </HeaderedContentControl.Content>
+        </HeaderedContentControl>
+    </StackPanel>
+</UserControl>

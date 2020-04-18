@@ -1,6 +1,8 @@
 ﻿using ComicDownloader.Model.DtoConvert;
+using ComicDownloader.Model.Editors;
 using ComicDownloader.Repo;
 using JMI.General;
+using JMI.General.ListSelection;
 using JMI.General.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,8 +24,8 @@ namespace ComicDownloader.Model
             PhotosCollection = new ComicPhotoCollection();
             WorkPhotos = new ComicPhotoCollection();
             DownloadLogs = new ObservableCollection<DownloadLogger>();
+            ComicEditors = new ObservableCollection<ComicEditor>();
             ComicCreator = new ComicCreator(repository);
-            ComicUpdater = new ComicUpdater(repository);
             //LoadSettings();
             //TODO: testiä varten
             //GetComicsFromDatabase();
@@ -56,9 +58,8 @@ namespace ComicDownloader.Model
         /// Collection to hold all logs used during download
         /// </summary>
         public ObservableCollection<DownloadLogger> DownloadLogs { get; private set; }
-
+        public ObservableCollection<ComicEditor> ComicEditors { get; private set; }
         public ComicCreator ComicCreator { get; private set; }
-        public ComicUpdater ComicUpdater { get; private set; }
 
         private bool downloadComicData;
         /// <summary>
@@ -109,7 +110,6 @@ namespace ComicDownloader.Model
                 return;
             }
 
-            //TODO: seuraava rivi poistaa kaikki tiedot myös tietokannasta
             ComicsCollection.RemoveAll();
             PhotosCollection.RemoveAll();
             WorkPhotos.RemoveAll();
@@ -134,10 +134,10 @@ namespace ComicDownloader.Model
                 logger.Log(LogFactory.CreateWarningMessage(msg));
                 return false;
             }
-
+            DownloadLogs.Clear();
+            ComicEditors.Clear();
             repository = new ComicRepository(pathToRepository);
             ComicCreator = new ComicCreator(repository);
-            ComicUpdater = new ComicUpdater(repository);
             await GetComicsFromRepositoryAsync();
             return true;
         }
@@ -154,15 +154,57 @@ namespace ComicDownloader.Model
             DownloadRunning = false;
         }
 
-        public async Task Download()
+        public async Task DownloadAll()
+        {
+            if (!InitializeDownload())
+            {
+                return;
+            }
+            if (DownloadComicData)
+            {
+                CreateComicWorkItems(ComicsCollection.GetAllItemsAsIEnumerable());
+            }
+            await Download();
+        }
+
+        public async Task DownloadChecked()
+        {
+            if (!InitializeDownload())
+            {
+                return;
+            }
+            if (DownloadComicData)
+            {
+                CreateComicWorkItems(ComicsCollection.GetCheckedItemsAsIEnumerable());
+            }
+            await Download();
+        }
+
+        private bool InitializeDownload()
         {
             //check if download is already running
             if (DownloadRunning)
             {
-                return;
+                return false;
             }
             DownloadRunning = true;
             DownloadLogs.Clear();
+            return true;
+        }
+
+        private void CreateComicWorkItems(IEnumerable<Comic> collection)
+        {
+            workItems.Clear();
+            foreach (Comic comic in collection)
+            {
+                ComicWorkItem workItem = new ComicWorkItem(comic);
+                workItems.Add(workItem);
+                DownloadLogs.Add(workItem.Log);
+            }
+        }
+
+        private async Task Download()
+        {
             if (DownloadComicData)
             {
                 //Download information
@@ -173,9 +215,9 @@ namespace ComicDownloader.Model
             //1. Download information AND images
             //2. Download only images
 
-            //In option one, information download must be succesfull until
-            //images can be dowloaded
-            if ((DownloadComicData && crawlSucceeded && DownloadComicPhoto) ||
+            //In option one, information download must be succesfull 
+            //until images can be dowloaded
+            if ((DownloadComicData && DownloadComicPhoto && crawlSucceeded) ||
                 (!DownloadComicData && DownloadComicPhoto))
             {
                 //Download images
@@ -186,27 +228,25 @@ namespace ComicDownloader.Model
                     await UpdateWorkPhotosToRepository();
                 }
             }
-
             DownloadRunning = false;
         }
 
-        private void CreateComicWorkItems()
-        {
-            workItems.Clear();
-            foreach (Comic comic in ComicsCollection.CheckedItems)
-            {
-                ComicWorkItem workItem = new ComicWorkItem(comic);
-                workItems.Add(workItem);
-                DownloadLogs.Add(workItem.Log);
-            }
-        }
+        //private void CreateComicWorkItems()
+        //{
+        //    workItems.Clear();
+        //    foreach (Comic comic in ComicsCollection.CheckedItems)
+        //    {
+        //        ComicWorkItem workItem = new ComicWorkItem(comic);
+        //        workItems.Add(workItem);
+        //        DownloadLogs.Add(workItem.Log);
+        //    }
+        //}
 
         private async Task Crawl()
         {
             string msg = string.Empty;
             crawlSucceeded = false;
 
-            CreateComicWorkItems();
             if (workItems.Count < 1)
             {
                 msg = $"No comics checked for downloading.";
@@ -221,25 +261,16 @@ namespace ComicDownloader.Model
                 MaxDegreeOfParallelism = Environment.ProcessorCount
             };
 
-            //List<ComicDataCrawler> crawlers = new List<ComicDataCrawler>();
-            //BlockingCollection<ComicPhoto> comicPhotos = new BlockingCollection<ComicPhoto>();
-            //foreach (Comic comic in ComicsCollection.CheckedItems)
-            //{
-            //    //Comic c = comic;
-            //    //Progress<ILogMessage> progress = new Progress<ILogMessage>();
-            //    //TODO: ei voi tehdä näin, koska kaikki viestit tulee yhteen logiin
-            //    //progress.ProgressChanged += OnProgressChanged;
-            //    //crawlers.Add(new ComicDataCrawler(ref c, comicPhotos, progress));
-            //}
-
             #region Run crawlers
             try
             {
-                await Task.Run(() =>
+                List<Task> tasks = new List<Task>();
+                foreach (ComicWorkItem item in workItems)
                 {
-                    Parallel.ForEach(workItems, po, async (workitem) =>
-                     await workitem.Crawler.DownloadDataAsync());
-                }, cts.Token);
+                    tasks.Add(item.Crawler.DownloadDataAsync(cts));
+                }
+                //Wait until all crawlers has finished
+                await Task.WhenAll(tasks);
             }
             catch (OperationCanceledException)
             {
@@ -261,33 +292,36 @@ namespace ComicDownloader.Model
             //Collect all photo items and insert data to repository
             foreach (ComicWorkItem cwi in workItems)
             {
-                WorkPhotos.AddRange(cwi.Photos.GetAllItemsAsIEnumerable());
+                WorkPhotos.AddRange(cwi.Photos);
             }
             //TODO: what should we do if this fails
             if (await InsertWorkPhotosToRepository())
             {
                 msg = $"Image information inserted to repository.";
                 logger.Log(LogFactory.CreateNormalMessage(msg));
+                //Add photos to collection
                 PhotosCollection.AddRange(WorkPhotos.GetAllItemsAsIEnumerable());
+                //Add photos to comic photos
+                workItems.ForEach(wi => wi.MoveDownloadedPhotoInfosToComic());
+
                 //TODO: what should we do if this fails
-                //Update comic data to repository
                 if (await UpdateWorkComicsToRepository())
                 {
-                    //"Sarjakuvatiedot päivitetty tietokantaan.");
                     msg = $"Comic information updated to repository.";
                     logger.Log(LogFactory.CreateNormalMessage(msg));
                 }
                 else
                 {
-                    // "Sarjakuvatietojen päivitys tietokantaan epäonnistui.");
                     msg = $"Updating comic information to repository failed.";
                     logger.Log(LogFactory.CreateWarningMessage(msg));
+                    return;
                 }
             }
             else
             {
                 msg = $"Adding image information to repository failed.";
                 logger.Log(LogFactory.CreateWarningMessage(msg));
+                return;
             }
             crawlSucceeded = true;
         }
@@ -334,6 +368,14 @@ namespace ComicDownloader.Model
         {
             string msg = string.Empty;
             photoDownloadSucceeded = false;
+
+            if (WorkPhotos.AllItems.Count == 0)
+            {
+                msg = $"There are no images to download.";
+                logger.Log(LogFactory.CreateWarningMessage(msg));
+                return;
+            }
+
             cts = new CancellationTokenSource();
             ParallelOptions po = new ParallelOptions
             {
@@ -349,8 +391,16 @@ namespace ComicDownloader.Model
 
             foreach (ComicPhoto cp in WorkPhotos.AllItems)
             {
-                ComicPhotoDownloader loader = new ComicPhotoDownloader(cp, imageDownloadLog.Progress);
-                downloaders.Add(loader);
+                if (!System.IO.File.Exists(cp.AbsoluteFilePath))
+                {
+                    ComicPhotoDownloader loader = new ComicPhotoDownloader(cp, imageDownloadLog.Progress);
+                    downloaders.Add(loader);
+                }
+                else
+                {
+                    msg = $"Image file {cp.AbsoluteFilePath} exists, image not added to downloads.";
+                    logger.Log(LogFactory.CreateWarningMessage(msg));
+                }
             }
 
             logger.Log(LogFactory.CreateNormalMessage("Starting to download images..."));
@@ -393,10 +443,28 @@ namespace ComicDownloader.Model
 
             return result;
         }
-        
+
         public void AddCheckedPhotosToWorkPhotos()
         {
             WorkPhotos.AddRange(PhotosCollection.GetCheckedItemsAsIEnumerable());
+        }
+
+        public void EditSelectedComic()
+        {
+            foreach (Comic item in ComicsCollection.SelectedItems)
+            {
+                if (!ComicEditors.Any(ed => ed.ModelItemId.Equals(item.Id)))
+                {
+                    ComicEditor editor = new ComicEditor(item, repository);
+                    editor.EndEditingRequested += OnEditorEndEditingRequested;
+                    ComicEditors.Add(editor);
+                }
+                else
+                {
+                    string msg = $"Comic '{item.Name}' is already in editing.";
+                    logger.Log(LogFactory.CreateNormalMessage(msg));
+                }
+            }
         }
         #endregion
 
@@ -404,6 +472,12 @@ namespace ComicDownloader.Model
         #endregion
 
         #region event handlers
+        private void OnEditorEndEditingRequested(object sender, EventArgs e)
+        {
+            ComicEditor editor = (ComicEditor)sender;
+            editor.EndEditingRequested -= OnEditorEndEditingRequested;
+            ComicEditors.Remove(editor);
+        }
         #endregion
     }
 }

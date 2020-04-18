@@ -180,7 +180,6 @@
     <Compile Include="Model\ComicCreator.cs" />
     <Compile Include="Model\ComicDataCrawler.cs" />
     <Compile Include="Model\ComicPhotoCollection.cs" />
-    <Compile Include="Model\ComicUpdater.cs" />
     <Compile Include="Model\ComicWorkItem.cs" />
     <Compile Include="Model\ComicManager.cs" />
     <Compile Include="Model\ComicPhoto.cs" />
@@ -188,6 +187,7 @@
     <Compile Include="Model\DownloadLogger.cs" />
     <Compile Include="Model\DtoConvert\ComicDtoConverter.cs" />
     <Compile Include="Model\DtoConvert\ComicPhotoDtoConverter.cs" />
+    <Compile Include="Model\Editors\ComicEditor.cs" />
     <Compile Include="Model\Identifier.cs" />
     <Compile Include="Model\IIsFinished.cs" />
     <Compile Include="Model\FinishedItem.cs" />
@@ -202,11 +202,16 @@
     <Compile Include="UI\ViewModel\ApplicationMainViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicListItemViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicListViewModel.cs" />
+    <Compile Include="UI\ViewModel\ComicManagerViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicPhotoListItemViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicPhotoListViewModel.cs" />
+    <Compile Include="UI\ViewModel\ComicsViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicWorkspaceViewModel.cs" />
     <Compile Include="UI\ViewModel\CreateNewComicTabViewModel.cs" />
     <Compile Include="UI\ViewModel\DowloadLogTabViewModel.cs" />
+    <Compile Include="UI\ViewModel\DownloadCommandsViewModel.cs" />
+    <Compile Include="UI\ViewModel\DownloadLogsViewModel.cs" />
+    <Compile Include="UI\ViewModel\DownloadViewModel.cs" />
     <Compile Include="UI\ViewModel\EditComicTabViewModel.cs" />
     <Compile Include="UI\View\ApplicationMainView.xaml.cs">
       <DependentUpon>ApplicationMainView.xaml</DependentUpon>
@@ -220,14 +225,38 @@
     <Compile Include="UI\View\ComicListView.xaml.cs">
       <DependentUpon>ComicListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\View\ComicManagerView.xaml.cs">
+      <DependentUpon>ComicManagerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\View\ComicPhotoListView.xaml.cs">
       <DependentUpon>ComicPhotoListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\ComicsView.xaml.cs">
+      <DependentUpon>ComicsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\View\ComicWorkspaceView.xaml.cs">
       <DependentUpon>ComicWorkspaceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\View\CreateNewComicView.xaml.cs">
       <DependentUpon>CreateNewComicView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\DatabaseSelectorView.xaml.cs">
+      <DependentUpon>DatabaseSelectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\DownloadComicsView.xaml.cs">
+      <DependentUpon>DownloadComicsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\DownloadCommandsView.xaml.cs">
+      <DependentUpon>DownloadCommandsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\DownloadLogsView.xaml.cs">
+      <DependentUpon>DownloadLogsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\DownloadView.xaml.cs">
+      <DependentUpon>DownloadView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\DownloadWorkItemsView.xaml.cs">
+      <DependentUpon>DownloadWorkItemsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\View\EditComicView.xaml.cs">
       <DependentUpon>EditComicView.xaml</DependentUpon>
@@ -282,7 +311,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\View\ComicManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\View\ComicPhotoListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\ComicsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -291,6 +328,30 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\View\CreateNewComicView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\DatabaseSelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\DownloadComicsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\DownloadCommandsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\DownloadLogsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\DownloadView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\DownloadWorkItemsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

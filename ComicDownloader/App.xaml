@@ -17,7 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush
                 x:Key="ApplicationColor"
-                Color="LightBlue" />
+                Color="LightGreen" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

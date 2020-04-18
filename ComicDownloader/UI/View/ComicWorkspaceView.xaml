@@ -58,6 +58,9 @@
                                     <Button 
                                         Content="Download checked"
                                         Command="{Binding DownloadCheckedCommand}"/>
+                                    <Button
+                                        Content="Cancel download"
+                                        Command="{Binding CancelDownloadCommand}" />
                                 </StackPanel>
                             </HeaderedContentControl.Content>
                         </HeaderedContentControl>

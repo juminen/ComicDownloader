@@ -2,6 +2,7 @@
 using ComicDownloader.Repo;
 using FluentValidation.Results;
 using JMI.General;
+using JMI.General.Logging;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,17 +15,31 @@ namespace ComicDownloader.Model
         public ComicCreator(ComicRepository comicRepository)
         {
             repository = comicRepository ?? throw new ArgumentNullException(nameof(comicRepository) + " can not be null");
-            Status = string.Empty;
+            ValidationResults = string.Empty;
         }
         #endregion
 
         #region properties
+        private SingletonLogger logger = SingletonLogger.Instance;
         private readonly ComicRepository repository;
-        public string Status { get; private set; }
-
+        private string validationResults;
+        public string ValidationResults
+        {
+            get { return validationResults; }
+            private set
+            {
+                validationResults = value;
+                ValidationResultsUpdated?.Invoke(this, EventArgs.Empty);
+            }
+        }
         #endregion
 
         #region methods
+        private void CreateLogEntry(ILogMessage message)
+        {
+            logger.Log(message);
+        }
+
         /// <summary>
         /// Validates given data and creates new comic and saves it to database if given data was ok.
         /// </summary>
@@ -44,34 +59,30 @@ namespace ComicDownloader.Model
             };
 
             //Validate data
-            SendStatusChangeEvent($"Validating data...");
             bool valid = await ValidateDataAsync(comic);
             if (!valid)
             {
-                ComicCreationFailed?.Invoke(this, EventArgs.Empty);
+                CreateLogEntry(LogFactory.CreateWarningMessage("Comic not created."));
                 return false;
             }
-            SendStatusChangeEvent($"Validation succesfull.");
-            
+
             //convert to DTO
             ComicDto dto = DtoConvert.ComicDtoConverter.ConvertItemToDto(comic);
 
             //Save to database
-            SendStatusChangeEvent($"Saving to database...");
+            CreateLogEntry(LogFactory.CreateNormalMessage("Saving to database..."));
             bool result = await repository.InsertComicAsync(dto);
             if (!result)
             {
-                SendStatusChangeEvent($"Saving to database failed, see log.");
-                ComicCreationFailed?.Invoke(this, EventArgs.Empty);
+                CreateLogEntry(LogFactory.CreateWarningMessage("Saving to database failed."));
                 return false;
             }
-            SendStatusChangeEvent($"Comic saved to database.");
-            ComicCreated?.Invoke(this, EventArgs.Empty);
             return true;
         }
 
         private async Task<bool> ValidateDataAsync(Comic comic)
         {
+            CreateLogEntry(LogFactory.CreateNormalMessage("Validating data..."));
             //Validate comic basic details
             ComicValidator validator = new ComicValidator();
             ValidationResult results = validator.Validate(comic);
@@ -84,7 +95,7 @@ namespace ComicDownloader.Model
                 {
                     sb.AppendLine(failure.ErrorMessage);
                 }
-                SendStatusChangeEvent(sb.ToString());
+                ValidationResults = sb.ToString();
                 return false;
             }
 
@@ -94,11 +105,11 @@ namespace ComicDownloader.Model
             switch (dupCheck)
             {
                 case DuplicateCheckResult.DatabaseError:
-                    SendStatusChangeEvent($"Loading data from database failed, see log.");
-                    result= false;
+                    ValidationResults = "Validation failed: Loading data from database failed, see log.";
+                    result = false;
                     break;
                 case DuplicateCheckResult.DuplicatesFound:
-                    SendStatusChangeEvent($"There is comic with same name and/or start url.");
+                    ValidationResults = "There is comic with same name and/or start url.";
                     result = false;
                     break;
                 case DuplicateCheckResult.DuplicatesNotFound:
@@ -107,20 +118,18 @@ namespace ComicDownloader.Model
                 default:
                     throw new ArgumentOutOfRangeException($"Unknown result '{dupCheck.ToString()}'");
             }
-            return result;
-        }
 
-        private void SendStatusChangeEvent(string status)
-        {
-            Status = status;
-            StatusChanged?.Invoke(this, EventArgs.Empty);
+            if (result)
+            {
+                ValidationResults = string.Empty;
+                CreateLogEntry(LogFactory.CreateNormalMessage("Validation succesfull."));
+            }
+            return result;
         }
         #endregion
 
         #region events
-        public event EventHandler StatusChanged;
-        public event EventHandler ComicCreated;
-        public event EventHandler ComicCreationFailed;
+        public event EventHandler ValidationResultsUpdated;
         #endregion
 
         #region event handlers

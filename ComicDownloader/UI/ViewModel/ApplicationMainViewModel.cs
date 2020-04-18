@@ -3,6 +3,8 @@ using JMI.General;
 using JMI.General.Logging;
 using JMI.General.VM.Application;
 using JMI.General.VM.IO.Picker;
+using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace ComicDownloader.UI.ViewModel
@@ -13,32 +15,39 @@ namespace ComicDownloader.UI.ViewModel
         public ApplicationMainViewModel()
         {
             WindowTitle = "Comic downloader";
-            //TODO: ikkunan asetuksien lataus muistista
-            Logger logger = SingletonLogger.Instance;
-            logger.Log(LogFactory.CreateNormalMessage("Application started."));
-            DatabaseSelector = new OpenSingleFilePickerViewModel("Current database", "...")
+            FilePicker = new OpenSingleFilePickerViewModel("Current database", "...")
             {
                 FileFilters = JMI.General.IO.FileFilters.SQLite.Filter
             };
-            ConnectToDatabase();
+            LoadSettingsFromDisk();
+
+            //if (ConnectToDatabaseCommand.CanExecute(CurrentDatabaseExist()))
+            //{
+            //    //ConnectToDatabaseCommand.Execute(await ConnectToDatabase());
+            //}
+
+            //ConnectToDatabase();
             //TODO: testing
-            ForTesting();
+            //ForTesting();
         }
         #endregion
 
         #region properties
-        public object workspace;
-        public object Workspace
+        Logger logger = SingletonLogger.Instance;
+        ComicManager manager;
+
+        public ComicManagerViewModel workspace;
+        public ComicManagerViewModel Workspace
         {
             get { return workspace; }
             private set { SetProperty(ref workspace, value); }
         }
 
-        private OpenSingleFilePickerViewModel databaseSelector;
-        public OpenSingleFilePickerViewModel DatabaseSelector
+        private OpenSingleFilePickerViewModel filePicker;
+        public OpenSingleFilePickerViewModel FilePicker
         {
-            get { return databaseSelector; }
-            private set { SetProperty(ref databaseSelector, value); }
+            get { return filePicker; }
+            private set { SetProperty(ref filePicker, value); }
         }
         #endregion
 
@@ -52,8 +61,8 @@ namespace ComicDownloader.UI.ViewModel
                 {
                     connectToDatabaseCommand =
                       new RelayCommand(
-                          param => ConnectToDatabase(),
-                          param => true);
+                          async param => await ConnectToDatabase(),
+                          param => CurrentDatabaseExist());
                 }
                 return connectToDatabaseCommand;
             }
@@ -61,11 +70,42 @@ namespace ComicDownloader.UI.ViewModel
         #endregion
 
         #region methods
-        //TODO: ikkunan asetuksien tallennus muistiin
-        private void ConnectToDatabase()
+        private void LoadSettingsFromDisk()
         {
-            //TODO: tähän oikea toteutus
-            DatabaseSelector.SelectedPath = @"F:\Kuvat\0_testi\Sarjakuvat_testi.sqlite";
+            FilePicker.SelectedPath = @"F:\Kuvat\0_testi\Sarjakuvat_testi.sqlite"; //TODO: testiä varten, tähän myöhemmin oikea toteutus
+            //TODO: ikkunan asetuksien lataus muistista
+            WindowHeight = SystemParameters.PrimaryScreenHeight / 2;
+            WindowWidht = SystemParameters.PrimaryScreenWidth / 2;
+
+            WindowTop = WindowHeight / 2;
+            WindowLeft = WindowWidht / 2;
+        }
+
+        //TODO: asetuksien tallennus muistiin
+        private bool CurrentDatabaseExist()
+        {
+            return System.IO.File.Exists(FilePicker.SelectedPath);
+        }
+
+        private async Task ConnectToDatabase()
+        {
+            if (!CurrentDatabaseExist())
+            {
+                logger.Log(LogFactory.CreateWarningMessage($"Selected database '{ FilePicker.SelectedPath }' does not exist."));
+                return;
+            }
+            if (manager == null)
+            {
+                manager = new ComicManager(FilePicker.SelectedPath);
+            }
+            //else
+            //{
+            //    await manager.ConnectToRepository(FilePicker.SelectedPath);
+            //}
+            ComicManagerViewModel vm = new ComicManagerViewModel(manager);
+            await manager.ConnectToRepository(FilePicker.SelectedPath);
+            //await manager.GetComicsFromRepositoryAsync();
+            Workspace = vm;
         }
         #endregion
 
@@ -76,46 +116,49 @@ namespace ComicDownloader.UI.ViewModel
         #endregion
 
         #region For Testing
-        
+
         private void ForTesting()
         {
-            WindowHeight = SystemParameters.PrimaryScreenHeight / 2;
-            WindowWidht = SystemParameters.PrimaryScreenWidth / 2;
-
-            WindowTop = WindowHeight / 2;
-            WindowLeft = WindowWidht / 2;
-
             //WindowState = WindowState.Maximized;
             //TestCreateNewComic();
             //TestComicListView();
-            TestComicWorkspace();
+            //TestComicWorkspace();
+            //TestComicManagerView();
         }
 
-        private void TestCreateNewComic()
-        {
-            ComicCreator comicCreator = new ComicCreator(new Repo.ComicRepository(DatabaseSelector.SelectedPath));
-            CreateNewComicTabViewModel vm = new CreateNewComicTabViewModel(comicCreator)
-            {
-                Name = "Fingerpori",
-                //SavingLocation = @"F:\Kuvat\0_testi\testi",
-                StartUrl = @"http://www.hs.fi/fingerpori/"
-            };
+        //private void TestCreateNewComic()
+        //{
+        //    ComicCreator comicCreator = new ComicCreator(new Repo.ComicRepository(FilePicker.SelectedPath));
+        //    CreateNewComicTabViewModel vm = new CreateNewComicTabViewModel(comicCreator)
+        //    {
+        //        Name = "Fingerpori",
+        //        //SavingLocation = @"F:\Kuvat\0_testi\testi",
+        //        StartUrl = @"http://www.hs.fi/fingerpori/"
+        //    };
 
-            Workspace = vm;
-        }
+        //    Workspace = vm;
+        //}
 
-        private void TestComicListView()
-        {
-            ComicManager manager = new ComicManager(DatabaseSelector.SelectedPath);
-            ComicListViewModel vm = new ComicListViewModel(manager.ComicsCollection);
-            manager.GetComicsFromRepositoryAsync();
-            Workspace = vm;
-        }
+        //private void TestComicListView()
+        //{
+        //    ComicManager manager = new ComicManager(FilePicker.SelectedPath);
+        //    ComicListViewModel vm = new ComicListViewModel(manager.ComicsCollection);
+        //    manager.GetComicsFromRepositoryAsync();
+        //    Workspace = vm;
+        //}
 
-        private void TestComicWorkspace()
+        //private void TestComicWorkspace()
+        //{
+        //    ComicManager manager = new ComicManager(FilePicker.SelectedPath);
+        //    ComicWorkspaceViewModel vm = new ComicWorkspaceViewModel(manager);
+        //    manager.GetComicsFromRepositoryAsync();
+        //    Workspace = vm;
+        //}
+
+        private void TestComicManagerView()
         {
-            ComicManager manager = new ComicManager(DatabaseSelector.SelectedPath);
-            ComicWorkspaceViewModel vm = new ComicWorkspaceViewModel(manager);
+            ComicManager manager = new ComicManager(FilePicker.SelectedPath);
+            ComicManagerViewModel vm = new ComicManagerViewModel(manager);
             manager.GetComicsFromRepositoryAsync();
             Workspace = vm;
         }

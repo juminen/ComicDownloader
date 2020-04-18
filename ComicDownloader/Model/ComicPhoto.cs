@@ -112,9 +112,11 @@ namespace ComicDownloader.Model
 
         private string CreateDefaultRelativePathWithoutExtension()
         {
-            string year = PublishDate.Year.ToString("yyyy");
-            string filename = Parent.Name + "_" + PublishDate.ToString("yyyy-MM-dd");
-            string path = $"{ year }{ System.IO.Path.DirectorySeparatorChar }{ filename }";
+            string separator = System.IO.Path.DirectorySeparatorChar.ToString();
+            string comicName = Parent.GetFileName();
+            string year = PublishDate.Year.ToString();
+            string filename = comicName + "_" + PublishDate.ToString("yyyy-MM-dd");
+            string path = $"{ comicName }{ separator }{ year }{ separator }{ filename }";
             return path;
         }
 

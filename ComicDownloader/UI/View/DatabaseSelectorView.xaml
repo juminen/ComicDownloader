@@ -1,0 +1,41 @@
+﻿<UserControl
+    x:Class="ComicDownloader.UI.View.DatabaseSelectorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ComicDownloader.UI.View"
+    xmlns:pic="clr-namespace:JMI.General.View.WPF.IO.Picker;assembly=JMI.General.View.WPF"
+    mc:Ignorable="d"
+    d:DesignWidth="300">
+    <Grid>
+        <HeaderedContentControl
+            Grid.Row="0"
+            Template="{StaticResource HeaderControlBorderGridTemplate}">
+            <HeaderedContentControl.Header>
+                <Label
+                    Content="Database" />
+            </HeaderedContentControl.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <pic:FilePicker
+                    Grid.Column="0"
+                    DataContext="{Binding FilePicker}"
+                    FileFilters="{Binding FileFilters,
+                        Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedPath="{Binding SelectedPath,
+                        Mode=TwoWay,
+                        UpdateSourceTrigger=PropertyChanged}" />
+                <Button
+                    Grid.Column="1"
+                    Content="Connect"
+                    Command="{Binding ConnectToDatabaseCommand}" />
+            </Grid>
+        </HeaderedContentControl>
+    </Grid>
+</UserControl>

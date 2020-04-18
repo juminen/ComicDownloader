@@ -6,6 +6,11 @@ namespace ComicDownloader.Model
     class DownloadLogger : ProgressLogger
     {
         #region constructors
+        public DownloadLogger()
+        {
+        
+        }
+
         public DownloadLogger(IIsFinished isFinished)
         {
             Status = isFinished ?? throw new ArgumentNullException(nameof(isFinished) + " can not be null");
@@ -13,7 +18,7 @@ namespace ComicDownloader.Model
         #endregion
 
         #region properties
-        public IIsFinished Status { get; }
+        public IIsFinished Status { get; set; }
         #endregion
 
         #region methods

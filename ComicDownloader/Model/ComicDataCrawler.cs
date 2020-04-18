@@ -1,9 +1,12 @@
 ﻿using JMI.General.Logging;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ComicDownloader.Model
@@ -22,8 +25,8 @@ namespace ComicDownloader.Model
         /// <param name="progressReporter">For progress reporting</param>
         public ComicDataCrawler(
             ref Comic comic,
-            //BlockingCollection<ComicPhoto> containerForPhotos,
-            ComicPhotoCollection containerForPhotos,
+            BlockingCollection<ComicPhoto> containerForPhotos,
+            //ComicPhotoCollection containerForPhotos,
             IProgress<ILogMessage> progress)
         {
             this.comic = comic ?? throw new ArgumentNullException(nameof(comic));
@@ -37,9 +40,10 @@ namespace ComicDownloader.Model
         private Comic comic;
         private string siteContent = string.Empty;
         private string currentAddress = string.Empty;
-        //private BlockingCollection<ComicPhoto> comicPhotos;
-        private ComicPhotoCollection comicPhotos;
+        private BlockingCollection<ComicPhoto> comicPhotos;
+        //private ComicPhotoCollection comicPhotos;
         private IProgress<ILogMessage> progressReporter;
+        private CancellationTokenSource cancelTokenSource;
 
         private bool isFinished;
         public bool IsFinished
@@ -62,8 +66,9 @@ namespace ComicDownloader.Model
             progressReporter.Report(message);
         }
 
-        public async Task DownloadDataAsync()
+        public async Task DownloadDataAsync(CancellationTokenSource cts)
         {
+            cancelTokenSource = cts;
             IsFinished = false;
             //Download main site
             bool mainsiteDownloaded = await GetSiteContentAsync(comic.StartUrl);
@@ -81,7 +86,8 @@ namespace ComicDownloader.Model
                 return;
             }
 
-            while (true)
+            //while (true)
+            while (!cancelTokenSource.IsCancellationRequested)
             {
                 bool siteDownloaded = await GetSiteContentAsync(currentAddress);
                 if (!siteDownloaded)
@@ -95,6 +101,7 @@ namespace ComicDownloader.Model
                     return;
                 }
             }
+            IsFinished = true;
         }
 
         private async Task<bool> GetSiteContentAsync(string url)
@@ -107,13 +114,21 @@ namespace ComicDownloader.Model
                 return false;
             }
 
-            WebClient wc = new WebClient();
+            //WebClient wc = new WebClient();
             try
             {
                 s = $"Downloading page '{url}'...";
                 ReportProgress(LogFactory.CreateNormalMessage(s));
-                siteContent = await wc.DownloadStringTaskAsync(url);
+                //siteContent = await wc.DownloadStringTaskAsync(url);
+                using (HttpClient client = new HttpClient())
+                {
+                    using (HttpResponseMessage response = await client.GetAsync(url, cancelTokenSource.Token))
+                    {
+                        siteContent = await response.Content.ReadAsStringAsync();
+                    }
+                }
             }
+
             catch (Exception ex)
             {
                 s = $"Page {url} download failed.\n{ex.Message}";
@@ -160,7 +175,7 @@ namespace ComicDownloader.Model
             //http://www.hs.fi/fingerpori/car-2000004894832.html
             currentAddress = comic.StartUrl.Replace(common, currentAddress);
             s = $"Found address '{currentAddress}'.";
-            ReportProgress(LogFactory.CreateWarningMessage(s));
+            ReportProgress(LogFactory.CreateNormalMessage(s));
             return true;
         }
 
@@ -192,9 +207,21 @@ namespace ComicDownloader.Model
             };
 
             CreateFilePathForPhoto(ref cp);
-            comic.Photos.Add(cp);
-            //comicPhotos.Add(cp);
-            comicPhotos.AddItem(cp);
+
+            string s = $"Created comic photo {cp.DisplayText}";
+            ReportProgress(LogFactory.CreateNormalMessage(s));
+
+            //Check that there are no duplicate photos
+            if (!comic.Photos.Any(p => p.PublishDate == cp.PublishDate && p.Url == cp.Url))
+            {
+                //comic.Photos.Add(cp);
+                comicPhotos.Add(cp);
+            }
+            else
+            {
+                s = $"Comic {cp.DisplayText} was duplicate, not added.";
+                ReportProgress(LogFactory.CreateWarningMessage(s));
+            }
 
             if (!GetNextUrl())
             {

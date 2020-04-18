@@ -13,12 +13,19 @@
             <ColumnDefinition
                 Width="Auto" />
         </Grid.ColumnDefinitions>
+
         <CheckBox
             Grid.Column="0"
             IsChecked="{Binding IsChecked, 
             Mode=TwoWay,
             UpdateSourceTrigger=PropertyChanged}" />
-        <StackPanel
+        <Label
+            Grid.Column="1"
+            Content="{Binding DisplayText,
+            Mode=OneWay, 
+            UpdateSourceTrigger=PropertyChanged, 
+            FallbackValue='Name'}" />
+        <!--<StackPanel
             Grid.Column="1">
             <Label
                 FontFamily="14"
@@ -37,6 +44,6 @@
                 UpdateSourceTrigger=PropertyChanged, 
                 FallbackValue='LastDownloadDate'}" />
             </StackPanel>
-        </StackPanel>
+        </StackPanel>-->
     </Grid>
 </UserControl>

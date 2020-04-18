@@ -98,6 +98,22 @@ namespace ComicDownloader.UI.ViewModel
             }
         }
 
+        private RelayCommand cancelDownloadCommand;
+        public RelayCommand CancelDownloadCommand
+        {
+            get
+            {
+                if (cancelDownloadCommand == null)
+                {
+                    cancelDownloadCommand =
+                      new RelayCommand(
+                          param => manager.CancelDownload(),
+                          param => manager.DownloadRunning);
+                }
+                return cancelDownloadCommand;
+            }
+        }
+
         #endregion
 
         #region methods
@@ -181,13 +197,13 @@ namespace ComicDownloader.UI.ViewModel
 
         private void EditSelected()
         {
-            foreach (Comic item in manager.ComicsCollection.SelectedItems)
-            {
-                EditComicTabViewModel vm = new EditComicTabViewModel(manager.ComicUpdater, item);
-                vm.CloseRequested += OnTabCloseRequested;
-                Tabs.Add(vm);
-                SelectedTab = vm;
-            }
+            //foreach (Comic item in manager.ComicsCollection.SelectedItems)
+            //{
+            //    EditComicTabViewModel vm = new EditComicTabViewModel(manager.ComicUpdater, item);
+            //    vm.CloseRequested += OnTabCloseRequested;
+            //    Tabs.Add(vm);
+            //    SelectedTab = vm;
+            //}
         }
 
         private void CreateNewComic()
@@ -226,6 +242,8 @@ namespace ComicDownloader.UI.ViewModel
                             //DowloadLogTabViewModel tab = new DowloadLogTabViewModel(lvm, item.Status);
                             DowloadLogTabViewModel tab = new DowloadLogTabViewModel(item);
                             tab.CloseRequested += OnTabCloseRequested;
+                            Tabs.Add(tab);
+                            SelectedTab = tab;
                             //logTabs.Add(item, new Tuple<LogViewModel, DowloadLogTabViewModel>(lvm, tab));
                         }
                     }

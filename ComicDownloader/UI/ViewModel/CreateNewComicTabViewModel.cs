@@ -13,14 +13,14 @@ namespace ComicDownloader.UI.ViewModel
         public CreateNewComicTabViewModel(ComicCreator comicCreator)
         {
             creator = comicCreator ?? throw new ArgumentNullException(nameof(comicCreator) + " can not be null");
-            creator.StatusChanged += OnCreatorStatusChanged;
+            creator.ValidationResultsUpdated += OnValidationResultsUpdated;
 
             LastDownloadDate = DateTime.Today;
-            SavingLocation = DefaultPickers.DirectoryPicker;
+            SavingLocationPicker = DefaultPickers.DirectoryPicker;
             Title = "Create new comic";
             AllowClose = true;
             //TODO: poista testauksen jälkeen
-            SavingLocation.SelectedPath = @"F:\Kuvat\0_testi\testi";
+            SavingLocationPicker.SelectedPath = @"F:\Kuvat\0_testi\testi";
         }
         #endregion
 
@@ -48,56 +48,31 @@ namespace ComicDownloader.UI.ViewModel
             set { SetProperty(ref startUrl, value); }
         }
 
-        private DirectoryPickerViewModel savingLocation;
-        public DirectoryPickerViewModel SavingLocation
+        private DirectoryPickerViewModel savingLocationPicker;
+        public DirectoryPickerViewModel SavingLocationPicker
         {
-            get { return savingLocation; }
-            private set { SetProperty(ref savingLocation, value); }
+            get { return savingLocationPicker; }
+            private set { SetProperty(ref savingLocationPicker, value); }
         }
 
-        public string Status { get { return creator.Status; } }
+        private string validationResult;
+        public string ValidationResult
+        {
+            get { return validationResult; }
+            private set { SetProperty(ref validationResult, value); }
+        }
+
         protected override bool CreateEnabled => true;
         #endregion
 
         #region commands
-        //private RelayCommand createCommand;
-        //public RelayCommand CreateCommand
-        //{
-        //    get
-        //    {
-        //        if (createCommand == null)
-        //        {
-        //            createCommand =
-        //              new RelayCommand(
-        //                  async param => await CreateComicAsync(),
-        //                  param => true);
-        //        }
-        //        return createCommand;
-        //    }
-        //}
-
-        //private RelayCommand cancelCommand;
-        //public RelayCommand CancelCommand
-        //{
-        //    get
-        //    {
-        //        if (cancelCommand == null)
-        //        {
-        //            cancelCommand =
-        //              new RelayCommand(
-        //                  param => Cancel(),
-        //                  param => true);
-        //        }
-        //        return cancelCommand;
-        //    }
-        //}
         #endregion
 
         #region methods
         protected override async Task CreateItemAsync()
         {
             bool result = await creator.CreateComicAsync(
-                Name, StartUrl, SavingLocation.SelectedPath, LastDownloadDate);
+                Name, StartUrl, SavingLocationPicker.SelectedPath, LastDownloadDate);
             if (result)
             {
                 RequestClose();
@@ -106,14 +81,14 @@ namespace ComicDownloader.UI.ViewModel
 
         public override void Dispose()
         {
-            creator.StatusChanged -= OnCreatorStatusChanged;
+            creator.ValidationResultsUpdated -= OnValidationResultsUpdated;
         }
         #endregion
 
         #region events
-        private void OnCreatorStatusChanged(object sender, EventArgs e)
+        private void OnValidationResultsUpdated(object sender, EventArgs e)
         {
-            OnPropertyChanged(nameof(Status));
+            ValidationResult = creator.ValidationResults;
         }
         #endregion
 
