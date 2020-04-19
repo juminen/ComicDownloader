@@ -82,13 +82,6 @@ namespace ComicDownloader.UI.ViewModel
 
         private void EditSelected()
         {
-            //foreach (Comic item in manager.ComicsCollection.SelectedItems)
-            //{
-            //    EditComicTabViewModel vm = new EditComicTabViewModel(manager.ComicUpdater, item);
-            //    vm.CloseRequested += OnTabCloseRequested;
-            //    Tabs.Add(vm);
-            //    SelectedTab = vm;
-            //}
             manager.EditSelectedComic();
         }
 

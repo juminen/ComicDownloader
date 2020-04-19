@@ -9,13 +9,13 @@
     d:DesignHeight="450"
     d:DesignWidth="800">
     <TabControl>
-        <!--<TabItem
+        <TabItem
             Header="Download">
             <TabItem.Content>
                 <local:DownloadView
                     DataContext="{Binding Downloads}"/>
             </TabItem.Content>
-        </TabItem>-->
+        </TabItem>
         <TabItem
             Header="Comics">
             <TabItem.Content>

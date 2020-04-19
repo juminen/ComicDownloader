@@ -11,10 +11,6 @@
         <v:ComicManagerView />
     </DataTemplate>
     <DataTemplate
-        DataType="{x:Type vm:ComicWorkspaceViewModel}">
-        <v:ComicWorkspaceView />
-    </DataTemplate>
-    <DataTemplate
         DataType="{x:Type vm:ComicListItemViewModel}">
         <v:ComicListItemView />
     </DataTemplate>

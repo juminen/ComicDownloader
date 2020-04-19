@@ -23,7 +23,7 @@ namespace ComicDownloader.UI.ViewModel
 
         public DownloadViewModel Downloads { get; private set; }
         public ComicsViewModel Comics { get; private set; }
-        //public DownloadViewModel Comics { get; private set; }
+        //TODO: public PhotosViewModel Photos { get; private set; }
         #endregion
 
         #region commands

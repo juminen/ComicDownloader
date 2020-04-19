@@ -231,17 +231,6 @@ namespace ComicDownloader.Model
             DownloadRunning = false;
         }
 
-        //private void CreateComicWorkItems()
-        //{
-        //    workItems.Clear();
-        //    foreach (Comic comic in ComicsCollection.CheckedItems)
-        //    {
-        //        ComicWorkItem workItem = new ComicWorkItem(comic);
-        //        workItems.Add(workItem);
-        //        DownloadLogs.Add(workItem.Log);
-        //    }
-        //}
-
         private async Task Crawl()
         {
             string msg = string.Empty;
@@ -286,7 +275,7 @@ namespace ComicDownloader.Model
             }
             #endregion
 
-            msg = $"Information downloaded, saving to repository...";
+            msg = $"Information downloaded.";
             logger.Log(LogFactory.CreateNormalMessage(msg));
 
             //Collect all photo items and insert data to repository
@@ -294,34 +283,44 @@ namespace ComicDownloader.Model
             {
                 WorkPhotos.AddRange(cwi.Photos);
             }
-            //TODO: what should we do if this fails
-            if (await InsertWorkPhotosToRepository())
+            if (WorkPhotos.AllItems.Count < 1)
             {
-                msg = $"Image information inserted to repository.";
+                msg = $"There were no new image information to be saved.";
                 logger.Log(LogFactory.CreateNormalMessage(msg));
-                //Add photos to collection
-                PhotosCollection.AddRange(WorkPhotos.GetAllItemsAsIEnumerable());
-                //Add photos to comic photos
-                workItems.ForEach(wi => wi.MoveDownloadedPhotoInfosToComic());
-
-                //TODO: what should we do if this fails
-                if (await UpdateWorkComicsToRepository())
-                {
-                    msg = $"Comic information updated to repository.";
-                    logger.Log(LogFactory.CreateNormalMessage(msg));
-                }
-                else
-                {
-                    msg = $"Updating comic information to repository failed.";
-                    logger.Log(LogFactory.CreateWarningMessage(msg));
-                    return;
-                }
             }
             else
             {
-                msg = $"Adding image information to repository failed.";
-                logger.Log(LogFactory.CreateWarningMessage(msg));
-                return;
+                msg = $"Saving to repository...";
+                logger.Log(LogFactory.CreateNormalMessage(msg));
+                //TODO: what should we do if this fails
+                if (await InsertWorkPhotosToRepository())
+                {
+                    msg = $"Image information inserted to repository.";
+                    logger.Log(LogFactory.CreateNormalMessage(msg));
+                    //Add photos to collection
+                    PhotosCollection.AddRange(WorkPhotos.GetAllItemsAsIEnumerable());
+                    //Add photos to comic photos
+                    workItems.ForEach(wi => wi.MoveDownloadedPhotoInfosToComic());
+
+                    //TODO: what should we do if this fails
+                    if (await UpdateWorkComicsToRepository())
+                    {
+                        msg = $"Comic information updated to repository.";
+                        logger.Log(LogFactory.CreateNormalMessage(msg));
+                    }
+                    else
+                    {
+                        msg = $"Updating comic information to repository failed.";
+                        logger.Log(LogFactory.CreateWarningMessage(msg));
+                        return;
+                    }
+                }
+                else
+                {
+                    msg = $"Adding image information to repository failed.";
+                    logger.Log(LogFactory.CreateWarningMessage(msg));
+                    return;
+                }
             }
             crawlSucceeded = true;
         }

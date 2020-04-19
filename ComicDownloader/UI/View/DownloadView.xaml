@@ -41,12 +41,12 @@
                         Grid.Column="1"
                         DataContext="{Binding DownloadCommands,
                         Mode=OneWay, 
-                        UpdateSourceTrigger=PropertyChanged}"/>
+                        UpdateSourceTrigger=PropertyChanged}" />
                     <local:DownloadLogsView
                         Grid.Column="2"
                         DataContext="{Binding DownloadLogs,
                         Mode=OneWay, 
-                        UpdateSourceTrigger=PropertyChanged}"/>
+                        UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
             </HeaderedContentControl.Content>
         </HeaderedContentControl>

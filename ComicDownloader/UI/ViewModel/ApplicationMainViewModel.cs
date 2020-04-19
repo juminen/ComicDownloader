@@ -20,15 +20,6 @@ namespace ComicDownloader.UI.ViewModel
                 FileFilters = JMI.General.IO.FileFilters.SQLite.Filter
             };
             LoadSettingsFromDisk();
-
-            //if (ConnectToDatabaseCommand.CanExecute(CurrentDatabaseExist()))
-            //{
-            //    //ConnectToDatabaseCommand.Execute(await ConnectToDatabase());
-            //}
-
-            //ConnectToDatabase();
-            //TODO: testing
-            //ForTesting();
         }
         #endregion
 
@@ -113,55 +104,6 @@ namespace ComicDownloader.UI.ViewModel
         #endregion
 
         #region event handlers
-        #endregion
-
-        #region For Testing
-
-        private void ForTesting()
-        {
-            //WindowState = WindowState.Maximized;
-            //TestCreateNewComic();
-            //TestComicListView();
-            //TestComicWorkspace();
-            //TestComicManagerView();
-        }
-
-        //private void TestCreateNewComic()
-        //{
-        //    ComicCreator comicCreator = new ComicCreator(new Repo.ComicRepository(FilePicker.SelectedPath));
-        //    CreateNewComicTabViewModel vm = new CreateNewComicTabViewModel(comicCreator)
-        //    {
-        //        Name = "Fingerpori",
-        //        //SavingLocation = @"F:\Kuvat\0_testi\testi",
-        //        StartUrl = @"http://www.hs.fi/fingerpori/"
-        //    };
-
-        //    Workspace = vm;
-        //}
-
-        //private void TestComicListView()
-        //{
-        //    ComicManager manager = new ComicManager(FilePicker.SelectedPath);
-        //    ComicListViewModel vm = new ComicListViewModel(manager.ComicsCollection);
-        //    manager.GetComicsFromRepositoryAsync();
-        //    Workspace = vm;
-        //}
-
-        //private void TestComicWorkspace()
-        //{
-        //    ComicManager manager = new ComicManager(FilePicker.SelectedPath);
-        //    ComicWorkspaceViewModel vm = new ComicWorkspaceViewModel(manager);
-        //    manager.GetComicsFromRepositoryAsync();
-        //    Workspace = vm;
-        //}
-
-        private void TestComicManagerView()
-        {
-            ComicManager manager = new ComicManager(FilePicker.SelectedPath);
-            ComicManagerViewModel vm = new ComicManagerViewModel(manager);
-            manager.GetComicsFromRepositoryAsync();
-            Workspace = vm;
-        }
-        #endregion
+        #endregion       
     }
 }

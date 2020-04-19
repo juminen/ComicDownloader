@@ -7,7 +7,6 @@ namespace ComicDownloader.UI.ViewModel
     class DowloadLogTabViewModel : LogTabViewModel
     {
         #region constructors
-        //public DowloadLogTabViewModel(LogViewModel log, IIsFinished isFinished)
         public DowloadLogTabViewModel(DownloadLogger log) : base(log)
         {
             dLogger = log;

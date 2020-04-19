@@ -26,10 +26,7 @@
                 <commands:CommandGroupButtonListView
                     Grid.Column="0" />
                 <local:ComicPhotoListView
-                    Grid.Column="1"
-                    DataContext="{Binding AllItems,
-                    Mode=OneWay, 
-                    UpdateSourceTrigger=PropertyChanged}" />
+                    Grid.Column="1"/>
             </Grid>
         </HeaderedContentControl.Content>
     </HeaderedContentControl>

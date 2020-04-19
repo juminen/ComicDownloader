@@ -27,21 +27,6 @@ namespace ComicDownloader.UI.ViewModel
         public ComicListViewModel DownloadComics { get; private set; }
         public DownloadCommandsViewModel DownloadCommands { get; private set; }
         public DownloadLogsViewModel DownloadLogs { get; private set; }
-
-        //private DownloadCommandsViewModel downloadCommands;
-        //public DownloadCommandsViewModel DownloadCommands
-        //{
-        //    get { return downloadCommands; }
-        //    private set { SetProperty(ref downloadCommands, value); }
-        //}
-
-        //private DownloadLogsViewModel downloadLogs;
-        //public DownloadLogsViewModel DownloadLogs
-        //{
-        //    get { return downloadLogs; }
-        //    private set { SetProperty(ref downloadLogs, value); }
-        //}
-
         public ComicPhotoListViewModel WorkPhotos { get; private set; }
         #endregion
 

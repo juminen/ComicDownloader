@@ -206,7 +206,6 @@
     <Compile Include="UI\ViewModel\ComicPhotoListItemViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicPhotoListViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicsViewModel.cs" />
-    <Compile Include="UI\ViewModel\ComicWorkspaceViewModel.cs" />
     <Compile Include="UI\ViewModel\CreateNewComicTabViewModel.cs" />
     <Compile Include="UI\ViewModel\DowloadLogTabViewModel.cs" />
     <Compile Include="UI\ViewModel\DownloadCommandsViewModel.cs" />
@@ -233,9 +232,6 @@
     </Compile>
     <Compile Include="UI\View\ComicsView.xaml.cs">
       <DependentUpon>ComicsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\View\ComicWorkspaceView.xaml.cs">
-      <DependentUpon>ComicWorkspaceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\View\CreateNewComicView.xaml.cs">
       <DependentUpon>CreateNewComicView.xaml</DependentUpon>
@@ -320,10 +316,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\View\ComicsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\View\ComicWorkspaceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

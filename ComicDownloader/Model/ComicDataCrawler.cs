@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,12 +20,11 @@ namespace ComicDownloader.Model
         /// Default constructor
         /// </summary>
         /// <param name="comic"><see cref="Comic"/> which data will be downloaded</param>
-        /// <param name="containerForPhotos">Container for <see cref="ComicPhoto"/> constructed from downloaded data</param>
+        /// <param name="containerForPhotos">Container for <see cref="ComicPhoto"/> constructed downloaded data</param>
         /// <param name="progressReporter">For progress reporting</param>
         public ComicDataCrawler(
             ref Comic comic,
             BlockingCollection<ComicPhoto> containerForPhotos,
-            //ComicPhotoCollection containerForPhotos,
             IProgress<ILogMessage> progress)
         {
             this.comic = comic ?? throw new ArgumentNullException(nameof(comic));
@@ -41,7 +39,6 @@ namespace ComicDownloader.Model
         private string siteContent = string.Empty;
         private string currentAddress = string.Empty;
         private BlockingCollection<ComicPhoto> comicPhotos;
-        //private ComicPhotoCollection comicPhotos;
         private IProgress<ILogMessage> progressReporter;
         private CancellationTokenSource cancelTokenSource;
 
@@ -114,12 +111,10 @@ namespace ComicDownloader.Model
                 return false;
             }
 
-            //WebClient wc = new WebClient();
             try
             {
                 s = $"Downloading page '{url}'...";
                 ReportProgress(LogFactory.CreateNormalMessage(s));
-                //siteContent = await wc.DownloadStringTaskAsync(url);
                 using (HttpClient client = new HttpClient())
                 {
                     using (HttpResponseMessage response = await client.GetAsync(url, cancelTokenSource.Token))
@@ -128,7 +123,6 @@ namespace ComicDownloader.Model
                     }
                 }
             }
-
             catch (Exception ex)
             {
                 s = $"Page {url} download failed.\n{ex.Message}";
@@ -181,7 +175,6 @@ namespace ComicDownloader.Model
 
         private bool GetComicPhotoInfo()
         {
-            //TODO: publishDate kusahtaa, on nollana
             if (!GetDate(out DateTime publishDate))
             {
                 return false;
@@ -214,7 +207,6 @@ namespace ComicDownloader.Model
             //Check that there are no duplicate photos
             if (!comic.Photos.Any(p => p.PublishDate == cp.PublishDate && p.Url == cp.Url))
             {
-                //comic.Photos.Add(cp);
                 comicPhotos.Add(cp);
             }
             else
