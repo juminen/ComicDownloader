@@ -23,12 +23,13 @@
                     DataContext="{Binding Comics}" />
             </TabItem.Content>
         </TabItem>
-        <!--<TabItem
+        <TabItem
             Header="Photos">
             <TabItem.Content>
-                <local:ComicPhotoListView />
+                <local:ComicPhotoView
+                    DataContext="{Binding Photos}" />
             </TabItem.Content>
-        </TabItem>-->
+        </TabItem>
         <!--<TabControl.Items>
             <TabItem
                 Header="Testi">

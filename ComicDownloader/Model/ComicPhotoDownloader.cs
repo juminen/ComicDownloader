@@ -101,7 +101,6 @@ namespace ComicDownloader.Model
             if (File.Exists(photo.AbsoluteFilePath))
             {
                 string s = $"Image file '{ photo.AbsoluteFilePath }' was already in the directory.";
-                photo.SetDownloadDateToNow();
                 ReportProgress(LogFactory.CreateWarningMessage(s));
                 return;
             }

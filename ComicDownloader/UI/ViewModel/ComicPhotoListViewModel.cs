@@ -7,6 +7,7 @@ namespace ComicDownloader.UI.ViewModel
     {
         public ComicPhotoListViewModel(ComicPhotoCollection selectionCollection) : base(selectionCollection)
         {
+            SetSorting();
         }
 
         protected override ComicPhotoListItemViewModel CreateViewModel(ComicPhoto item)

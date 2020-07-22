@@ -205,6 +205,7 @@
     <Compile Include="UI\ViewModel\ComicManagerViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicPhotoListItemViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicPhotoListViewModel.cs" />
+    <Compile Include="UI\ViewModel\ComicPhotosViewModel.cs" />
     <Compile Include="UI\ViewModel\ComicsViewModel.cs" />
     <Compile Include="UI\ViewModel\CreateNewComicTabViewModel.cs" />
     <Compile Include="UI\ViewModel\DowloadLogTabViewModel.cs" />
@@ -227,8 +228,14 @@
     <Compile Include="UI\View\ComicManagerView.xaml.cs">
       <DependentUpon>ComicManagerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\View\ComicPhotoDetailsView.xaml.cs">
+      <DependentUpon>ComicPhotoDetailsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\View\ComicPhotoListView.xaml.cs">
       <DependentUpon>ComicPhotoListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\View\ComicPhotoView.xaml.cs">
+      <DependentUpon>ComicPhotoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\View\ComicsView.xaml.cs">
       <DependentUpon>ComicsView.xaml</DependentUpon>
@@ -311,7 +318,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\View\ComicPhotoDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\View\ComicPhotoListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\View\ComicPhotoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

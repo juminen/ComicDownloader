@@ -1,9 +1,5 @@
 ﻿using ComicDownloader.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ComicDownloader.UI.ViewModel
 {
@@ -15,6 +11,7 @@ namespace ComicDownloader.UI.ViewModel
             manager = comicManager ?? throw new ArgumentNullException(nameof(comicManager) + " can not be null");
             Downloads = new DownloadViewModel(manager);
             Comics = new ComicsViewModel(manager);
+            Photos = new ComicPhotosViewModel(manager);
         }
         #endregion
 
@@ -23,7 +20,7 @@ namespace ComicDownloader.UI.ViewModel
 
         public DownloadViewModel Downloads { get; private set; }
         public ComicsViewModel Comics { get; private set; }
-        //TODO: public PhotosViewModel Photos { get; private set; }
+        public ComicPhotosViewModel Photos { get; private set; }
         #endregion
 
         #region commands

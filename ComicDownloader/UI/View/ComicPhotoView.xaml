@@ -1,0 +1,51 @@
+﻿<UserControl
+    x:Class="ComicDownloader.UI.View.ComicPhotoView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ComicDownloader.UI.View"
+    xmlns:commands="clr-namespace:JMI.General.View.WPF.Commands;assembly=JMI.General.View.WPF"
+    mc:Ignorable="d"
+    d:DesignHeight="450"
+    d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+        <HeaderedContentControl
+            Grid.Row="0"
+            Template="{StaticResource HeaderControlBorderGridTemplate}">
+            <HeaderedContentControl.Header>
+                <Label
+                    Content="Comic photos" />
+            </HeaderedContentControl.Header>
+            <HeaderedContentControl.Content>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <commands:CommandGroupButtonListView
+                        Grid.Column="0"
+                        DataContext="{Binding ComicPhotos}"/>
+                    <local:ComicPhotoListView
+                        Grid.Column="1"
+                        DataContext="{Binding ComicPhotos,
+                        Mode=OneWay, 
+                        UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+            </HeaderedContentControl.Content>
+        </HeaderedContentControl>
+        <local:DownloadWorkItemsView
+            Grid.Row="1"
+            DataContext="{Binding WorkPhotos,
+            Mode=OneWay, 
+            UpdateSourceTrigger=PropertyChanged}" />
+    </Grid>
+</UserControl>

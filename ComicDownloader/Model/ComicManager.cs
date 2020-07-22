@@ -406,11 +406,16 @@ namespace ComicDownloader.Model
 
             try
             {
-                await Task.Run(() =>
+                //downloaders.ForEach(async d => await d.GetComicPhoto());
+                foreach (ComicPhotoDownloader d in downloaders)
                 {
-                    Parallel.ForEach(downloaders, po, async (loader) =>
-                     await loader.GetComicPhoto());
-                }, cts.Token);
+                    await d.GetComicPhoto();
+                }
+                //await Task.Run(() =>
+                //{
+                //    Parallel.ForEach(downloaders, po, async (loader) =>
+                //     await loader.GetComicPhoto());
+                //}, cts.Token);
             }
             catch (OperationCanceledException)
             {

@@ -21,21 +21,31 @@
             IsSynchronizedWithCurrentItem="True"
             IsReadOnly="True"
             AutoGenerateColumns="False"
-            SelectionMode="Single"
-            SelectionUnit="FullRow">
-            <DataGrid.ItemContainerStyle>
+            SelectionMode="Extended"
+            SelectionUnit="FullRow"
+            AlternatingRowBackground="Gainsboro"
+            EnableRowVirtualization="False">
+            <DataGrid.RowStyle>
                 <Style
-                    TargetType="{x:Type DataGridRow}">
+                    TargetType="DataGridRow">
                     <Setter
                         Property="IsSelected"
                         Value="{Binding IsSelected, Mode=TwoWay}" />
                 </Style>
-            </DataGrid.ItemContainerStyle>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
+                <!--<DataGridCheckBoxColumn
+                    Binding="{Binding IsSelected,
+                    Mode=TwoWay,
+                    UpdateSourceTrigger=PropertyChanged}"
+                    CanUserSort="False"
+                    CanUserReorder="False"
+                    Header="IsSelected"/>-->
                 <DataGridCheckBoxColumn
                     Binding="{Binding IsChecked,
                     Mode=TwoWay,
                     UpdateSourceTrigger=PropertyChanged}"
+                    IsReadOnly="False"
                     CanUserSort="False"
                     CanUserReorder="False" />
                 <DataGridTextColumn
