@@ -1,13 +1,16 @@
 ﻿using ComicDownloader.Model;
-using JMI.General.VM.ListSelection;
+using JMI.General.Selections;
+using JMI.General.VM.Selections;
 namespace ComicDownloader.UI.ViewModel
 {
-    class ComicListItemViewModel : SelectionCollectionItemViewModel
+    class ComicListItemViewModel : SelectionItemViewModel<Comic>
     {
-        public ComicListItemViewModel(Comic comic) : base(comic)
+        public ComicListItemViewModel(ISelectionItem<Comic> comic)
+            : base(comic)
         {
-            this.comic = comic;
-            this.comic.PropertyChanged += OnComicPropertyChanged;
+            //CLEAN: this.comic = comic.Target;
+            //CLEAN: this.comic.PropertyChanged += OnComicPropertyChanged;
+            item.Target.PropertyChanged += OnComicPropertyChanged;
         }
 
         private void OnComicPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -16,13 +19,19 @@ namespace ComicDownloader.UI.ViewModel
             {
                 OnPropertyChanged(nameof(LastDownloadDate));
             }
+            else if (e.PropertyName.Equals(nameof(Comic.DisplayText)))
+            {
+                OnPropertyChanged(nameof(DisplayText));
+            }
         }
 
-        private readonly Comic comic;
+        //CLEAN: private readonly Comic comic;
+
+        public string DisplayText => item.Target.DisplayText;
 
         public  string LastDownloadDate
         {
-            get { return comic.LastDownloadDate.ToString("dd.MM.yyyy"); }
+            get { return item.Target.LastDownloadDate.ToString("dd.MM.yyyy"); }
         }
     }
 }

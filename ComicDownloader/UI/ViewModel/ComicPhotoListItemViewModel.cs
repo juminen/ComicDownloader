@@ -1,14 +1,15 @@
 ﻿using ComicDownloader.Model;
-using JMI.General.VM.ListSelection;
+using JMI.General.Selections;
+using JMI.General.VM.Selections;
 
 namespace ComicDownloader.UI.ViewModel
 {
-    class ComicPhotoListItemViewModel : SelectionCollectionItemViewModel
+    class ComicPhotoListItemViewModel : SelectionItemViewModel<ComicPhoto>
     {
         #region constructors
-        public ComicPhotoListItemViewModel(ComicPhoto photo) : base(photo)
+        public ComicPhotoListItemViewModel(ISelectionItem<ComicPhoto> photo) : base(photo)
         {
-            this.photo = photo;
+            this.photo = photo.Target;
             this.photo.PropertyChanged += OnComicPropertyChanged;
         }
         #endregion
@@ -44,6 +45,11 @@ namespace ComicDownloader.UI.ViewModel
         public string Url
         {
             get { return photo.Url; }
+        }
+
+        public string SortByComicNameAndPublishDate
+        {
+            get { return $"{ photo.DisplayText }"; }
         }
         #endregion
 

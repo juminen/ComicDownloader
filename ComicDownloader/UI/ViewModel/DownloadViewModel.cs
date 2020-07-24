@@ -1,10 +1,6 @@
 ﻿using ComicDownloader.Model;
 using JMI.General;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ComicDownloader.UI.ViewModel
 {
@@ -18,6 +14,7 @@ namespace ComicDownloader.UI.ViewModel
             DownloadCommands = new DownloadCommandsViewModel(manager);
             DownloadLogs = new DownloadLogsViewModel(manager);
             WorkPhotos = new ComicPhotoListViewModel(manager.WorkPhotos);
+            //TODO: WorkPhotos.AddCommandGroup(DownloadCommands.)
         }
         #endregion
 

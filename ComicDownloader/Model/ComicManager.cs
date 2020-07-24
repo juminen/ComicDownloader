@@ -117,7 +117,7 @@ namespace ComicDownloader.Model
             //Add all comics to collection
             ComicsCollection.AddRange(ComicDtoConverter.ConvertDtosToItems(dtos, true));
             //Add all photos to collection
-            ComicsCollection.GetAllItemsAsIEnumerable().ToList().ForEach(
+            ComicsCollection.GetAllTargetItems().ToList().ForEach(
                 (p) => PhotosCollection.AddRange(p.Photos));
         }
 
@@ -162,7 +162,7 @@ namespace ComicDownloader.Model
             }
             if (DownloadComicData)
             {
-                CreateComicWorkItems(ComicsCollection.GetAllItemsAsIEnumerable());
+                CreateComicWorkItems(ComicsCollection.GetAllTargetItems());
             }
             await Download();
         }
@@ -175,9 +175,25 @@ namespace ComicDownloader.Model
             }
             if (DownloadComicData)
             {
-                CreateComicWorkItems(ComicsCollection.GetCheckedItemsAsIEnumerable());
+                CreateComicWorkItems(ComicsCollection.GetCheckedTargetItems());
             }
             await Download();
+        }
+
+        public async Task DownloadImages()
+        {
+            if (!InitializeDownload())
+            {
+                return;
+            }
+            //Download images
+            await DownloadPhotos();
+            if (photoDownloadSucceeded)
+            {
+                //Update image data to repository
+                await UpdateWorkPhotosToRepository();
+            }
+            DownloadRunning = false;
         }
 
         private bool InitializeDownload()
@@ -224,7 +240,7 @@ namespace ComicDownloader.Model
                 await DownloadPhotos();
                 if (photoDownloadSucceeded)
                 {
-                    //Download images
+                    //Update image data to repository
                     await UpdateWorkPhotosToRepository();
                 }
             }
@@ -298,7 +314,7 @@ namespace ComicDownloader.Model
                     msg = $"Image information inserted to repository.";
                     logger.Log(LogFactory.CreateNormalMessage(msg));
                     //Add photos to collection
-                    PhotosCollection.AddRange(WorkPhotos.GetAllItemsAsIEnumerable());
+                    PhotosCollection.AddRange(WorkPhotos.GetAllTargetItems());
                     //Add photos to comic photos
                     workItems.ForEach(wi => wi.MoveDownloadedPhotoInfosToComic());
 
@@ -329,7 +345,7 @@ namespace ComicDownloader.Model
         {
             bool result = await repository.InsertPhotosAsync
                 (
-                    ComicPhotoDtoConverter.ConvertItemsToDtos(WorkPhotos.GetAllItemsAsIEnumerable())
+                    ComicPhotoDtoConverter.ConvertItemsToDtos(WorkPhotos.GetAllTargetItems())
                 );
 
             //Task<bool> result = Task.FromResult
@@ -388,7 +404,7 @@ namespace ComicDownloader.Model
             DownloadLogger imageDownloadLog = new DownloadLogger(finishedItem) { Name = "Image Dowload" };
             DownloadLogs.Add(imageDownloadLog);
 
-            foreach (ComicPhoto cp in WorkPhotos.AllItems)
+            foreach (ComicPhoto cp in WorkPhotos.GetAllTargetItems())
             {
                 if (!System.IO.File.Exists(cp.AbsoluteFilePath))
                 {
@@ -442,7 +458,7 @@ namespace ComicDownloader.Model
         {
             bool result = await repository.UpdatePhotosAsync
                 (
-                    ComicPhotoDtoConverter.ConvertItemsToDtos(WorkPhotos.GetAllItemsAsIEnumerable())
+                    ComicPhotoDtoConverter.ConvertItemsToDtos(WorkPhotos.GetAllTargetItems())
                 );
 
             return result;
@@ -450,14 +466,14 @@ namespace ComicDownloader.Model
 
         public void AddCheckedPhotosToWorkPhotos()
         {
-            WorkPhotos.AddRange(PhotosCollection.GetCheckedItemsAsIEnumerable());
+            WorkPhotos.AddRange(PhotosCollection.GetCheckedTargetItems());
         }
 
         public void EditSelectedComic()
         {
-            foreach (Comic item in ComicsCollection.SelectedItems)
+            foreach (Comic item in ComicsCollection.GetSelectedTargetItems())
             {
-                if (!ComicEditors.Any(ed => ed.ModelItemId.Equals(item.Id)))
+                if (!ComicEditors.Any(ed => ed.ModelItemId.Equals(item.Identifier.Id)))
                 {
                     ComicEditor editor = new ComicEditor(item, repository);
                     editor.EndEditingRequested += OnEditorEndEditingRequested;

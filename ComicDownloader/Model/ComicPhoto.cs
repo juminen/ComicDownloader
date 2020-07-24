@@ -2,7 +2,7 @@
 
 namespace ComicDownloader.Model
 {
-    public class ComicPhoto : Identifier
+    public class ComicPhoto : BaseComicStripObject
     {
         #region constructors
         public ComicPhoto(Comic comic) : base()
@@ -25,7 +25,7 @@ namespace ComicDownloader.Model
             set
             {
                 SetProperty(ref publishDate, value);
-                OnPropertyChanged(nameof(DisplayText));
+                //CLEAN: OnPropertyChanged(nameof(DisplayText));
             }
         }
 

@@ -33,7 +33,7 @@ namespace ComicDownloader.Model.DtoConvert
             ComicDto parent = ComicDtoConverter.ConvertItemToDto(item.Parent);
             ComicPhotoDto dto = new ComicPhotoDto
             {
-                UniqueIdentifier = item.GetGuid(),
+                UniqueIdentifier = item.Identifier.GetGuid(),
                 ComicGuid = parent.UniqueIdentifier,
                 DownloadDate = item.DownloadDate,
                 RelativeFilePath = item.RelativeFilePath,

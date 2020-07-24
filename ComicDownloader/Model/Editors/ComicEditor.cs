@@ -59,7 +59,7 @@ namespace ComicDownloader.Model.Editors
             }
         }
 
-        public string ModelItemId { get { return comicToEdit.Id; } }
+        public string ModelItemId { get { return comicToEdit.Identifier.Id; } }
 
         #region editable properties
         private string name;

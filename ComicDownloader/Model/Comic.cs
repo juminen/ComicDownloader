@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ComicDownloader.Model
 {
-    public class Comic : Identifier
+    public class Comic : BaseComicStripObject
     {
         #region constructors
         public Comic() : base()
@@ -14,13 +14,11 @@ namespace ComicDownloader.Model
 
         public Comic(Guid guid) : base(guid)
         {
-
+            
         }
         #endregion
 
         #region properties
-        private Comic memento;
-
         private string name;
         /// <summary>
         /// Name of the comic
@@ -31,7 +29,7 @@ namespace ComicDownloader.Model
             set
             {
                 SetProperty(ref name, value);
-                OnPropertyChanged(nameof(DisplayText));
+                //CLEAN: OnPropertyChanged(nameof(DisplayText));
             }
         }
 
@@ -116,58 +114,10 @@ namespace ComicDownloader.Model
             return count;
         }
 
-        public void CreateMemento()
-        {
-            memento = new Comic(GetGuid())
-            {
-                Name = name,
-                StartUrl = startUrl,
-                LastDownloadDate = lastDownloadDate,
-                SavingLocation = savingLocation
-            };
-        }
-
-        public void BackupFromMemento()
-        {
-            if (memento != null)
-            {
-                Name = memento.Name;
-                LastDownloadDate = memento.LastDownloadDate;
-                StartUrl = memento.StartUrl;
-                SavingLocation = memento.SavingLocation;
-            }
-        }
-
         public override void Dispose()
         {
             Photos.ForEach(p => p.Dispose());
         }
-
-        ///// <summary>
-        ///// Validates <see cref="Name"/>, <see cref="SavingLocation"/> and <see cref="StartUrl"/>.
-        ///// </summary>
-        //public ActionResult<bool> ValidateData()
-        //{
-        //    ActionResult<bool> ar = new ActionResult<bool>();
-        //    int lenght = 2;
-        //    if (name.Length < lenght)
-        //    {
-        //        ar.AddFailReason($"Name must be longer than {lenght.ToString()}.");
-        //    }
-
-        //    if (!System.IO.Directory.Exists(SavingLocation))
-        //    {
-        //        ar.AddFailReason($"Given saving location does not exist.");
-        //    }
-
-        //    bool result = Uri.TryCreate(StartUrl, UriKind.Absolute, out Uri uriResult)
-        //        && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-        //    if (!result)
-        //    {
-        //        ar.AddFailReason($"Given start url is not valid http address.");
-        //    }
-        //    return ar;
-        //}
         #endregion
 
         #region events

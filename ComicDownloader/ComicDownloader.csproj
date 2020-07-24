@@ -175,6 +175,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\BaseComicStripObject.cs" />
     <Compile Include="Model\Comic.cs" />
     <Compile Include="Model\ComicCollection.cs" />
     <Compile Include="Model\ComicCreator.cs" />

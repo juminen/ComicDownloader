@@ -1,4 +1,4 @@
-﻿using JMI.General.ListSelection;
+﻿using JMI.General.Selections;
 
 namespace ComicDownloader.Model
 {

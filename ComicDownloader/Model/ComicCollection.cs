@@ -1,7 +1,7 @@
 ﻿using ComicDownloader.Model.DtoConvert;
 using ComicDownloader.Repo;
-using JMI.General.ListSelection;
 using JMI.General.Logging;
+using JMI.General.Selections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace ComicDownloader.Model
         /// <returns>True if item was in collection</returns>
         public bool ContainsComic(string identifier)
         {
-            return allItems.Any(x => x.Id.Equals(identifier));
+            return allItems.Any(x => x.Target.Identifier.Id.Equals(identifier));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ComicDownloader.Model
             {
                 return null;
             }
-            return allItems.First(x => x.Id.Equals(identifier));
+            return allItems.First(x => x.Target.Identifier.Id.Equals(identifier)).Target;
         }
 
         /// <summary>
