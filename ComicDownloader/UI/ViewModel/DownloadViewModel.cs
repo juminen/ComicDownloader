@@ -14,7 +14,7 @@ namespace ComicDownloader.UI.ViewModel
             DownloadCommands = new DownloadCommandsViewModel(manager);
             DownloadLogs = new DownloadLogsViewModel(manager);
             WorkPhotos = new ComicPhotoListViewModel(manager.WorkPhotos);
-            //TODO: WorkPhotos.AddCommandGroup(DownloadCommands.)
+            WorkPhotos.AddCommandGroup(DownloadCommands.DownloadImageCommandGroup);
         }
         #endregion
 

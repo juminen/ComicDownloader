@@ -12,12 +12,101 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition
+                Height="Auto" />
+            <RowDefinition
                 Height="*" />
             <RowDefinition
                 Height="*" />
         </Grid.RowDefinitions>
-        <HeaderedContentControl
+        <Expander
             Grid.Row="0"
+            Header="Filter photos"
+            DataContext="{Binding ComicPhotos}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Content="By comic name:" />
+                <ComboBox
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    IsSynchronizedWithCurrentItem="True"
+                    SelectedItem="{Binding SelectedNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding NameFilters}" />
+                <Label
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Content="By publish date:" />
+                <StackPanel
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    Orientation="Vertical">
+                    <!--Style="{StaticResource  ResourceKey=DatePickerStyle1}"-->
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <DatePicker
+                            FirstDayOfWeek="Monday"
+                            SelectedDateFormat="Short"
+                            SelectedDate="{Binding FilterPublishDateStart,
+                            Mode=TwoWay,
+                            TargetNullValue='',
+                            UpdateSourceTrigger=PropertyChanged}" />
+                        <Label
+                            Content="(start)" />
+                    </StackPanel>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <DatePicker
+                            FirstDayOfWeek="Monday"
+                            SelectedDateFormat="Short"
+                            SelectedDate="{Binding FilterPublishDateEnd, 
+                            Mode=TwoWay,
+                            TargetNullValue='',
+                            UpdateSourceTrigger=PropertyChanged}" />
+                        <Label
+                            Content="(end)" />
+                    </StackPanel>
+                </StackPanel>
+                <Label
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Content="By status:" />
+                <ComboBox
+                    Grid.Column="2"
+                    Grid.Row="2"
+                    IsSynchronizedWithCurrentItem="True"
+                    SelectedItem="{Binding SelectedStatusFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding StatusFilters}" />                
+                <Button
+                    Grid.Column="0"
+                    Grid.Row="4"
+                    Content="Clear"
+                    Command="{Binding ClearFiltersCommand}" />
+                <Button
+                    Grid.Column="1"
+                    Grid.Row="4"
+                    Content="Apply"
+                    Command="{Binding ApplyFiltersCommand}"/>
+            </Grid>
+        </Expander>
+        <HeaderedContentControl
+            Grid.Row="1"
             Template="{StaticResource HeaderControlBorderGridTemplate}">
             <HeaderedContentControl.Header>
                 <Label
@@ -33,7 +122,7 @@
                     </Grid.ColumnDefinitions>
                     <commands:CommandGroupButtonListView
                         Grid.Column="0"
-                        DataContext="{Binding ComicPhotos}"/>
+                        DataContext="{Binding ComicPhotos}" />
                     <local:ComicPhotoListView
                         Grid.Column="1"
                         DataContext="{Binding ComicPhotos,
@@ -43,7 +132,7 @@
             </HeaderedContentControl.Content>
         </HeaderedContentControl>
         <local:DownloadWorkItemsView
-            Grid.Row="1"
+            Grid.Row="2"
             DataContext="{Binding WorkPhotos,
             Mode=OneWay, 
             UpdateSourceTrigger=PropertyChanged}" />

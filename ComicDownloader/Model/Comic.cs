@@ -29,7 +29,7 @@ namespace ComicDownloader.Model
             set
             {
                 SetProperty(ref name, value);
-                //CLEAN: OnPropertyChanged(nameof(DisplayText));
+                OnPropertyChanged(nameof(DisplayText));
             }
         }
 

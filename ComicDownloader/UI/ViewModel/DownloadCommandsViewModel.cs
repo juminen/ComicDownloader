@@ -2,7 +2,6 @@
 using JMI.General;
 using JMI.General.VM.Commands;
 using System;
-using System.Collections.ObjectModel;
 
 namespace ComicDownloader.UI.ViewModel
 {
@@ -12,25 +11,14 @@ namespace ComicDownloader.UI.ViewModel
         public DownloadCommandsViewModel(ComicManager comicManager)
         {
             manager = comicManager ?? throw new ArgumentNullException(nameof(comicManager) + " can not be null");
+            CreateCommandGroup();
         }
         #endregion
 
         #region properties
         private readonly ComicManager manager;
 
-        public ReadOnlyCollection<CommandGroupViewModel> CommandGroups { get; private set; }
-
-        public bool DownloadComicInfos
-        {
-            get { return manager.DownloadComicData; }
-            set { manager.DownloadComicData = value; }
-        }
-
-        public bool DownloadImageFiles
-        {
-            get { return manager.DownloadComicPhoto; }
-            set { manager.DownloadComicPhoto = value; }
-        }
+        public CommandGroupViewModel DownloadImageCommandGroup { get; private set; }
         #endregion
 
         #region commands
@@ -45,8 +33,7 @@ namespace ComicDownloader.UI.ViewModel
                       new RelayCommand(
                           async param => await manager.DownloadAll(),
                           param => !manager.DownloadRunning &&
-                          manager.ComicsCollection.AllItems.Count > 0 &&
-                          (manager.DownloadComicData || manager.DownloadComicPhoto));
+                          manager.ComicsCollection.AllItems.Count > 0);
                 }
                 return downloadAllCommand;
             }
@@ -63,8 +50,7 @@ namespace ComicDownloader.UI.ViewModel
                       new RelayCommand(
                           async param => await manager.DownloadChecked(),
                           param => !manager.DownloadRunning &&
-                          manager.ComicsCollection.CheckedItems.Count > 0 &&
-                          (manager.DownloadComicData || manager.DownloadComicPhoto));
+                          manager.ComicsCollection.CheckedItems.Count > 0);
                 }
                 return downloadCheckedCommand;
             }
@@ -85,9 +71,33 @@ namespace ComicDownloader.UI.ViewModel
                 return cancelDownloadCommand;
             }
         }
+
+        private RelayCommand downloadImagesCommand;
+        public RelayCommand DownloadImagesCommand
+        {
+            get
+            {
+                if (downloadImagesCommand == null)
+                {
+                    downloadImagesCommand =
+                      new RelayCommand(
+                          async param => await manager.DownloadImages(),
+                          param => !manager.DownloadRunning &&
+                          manager.WorkPhotos.AllItems.Count > 0);
+                }
+                return downloadImagesCommand;
+            }
+        }
         #endregion
 
         #region methods
+        private void CreateCommandGroup()
+        {
+            CommandViewModel downloadImageCvm = new CommandViewModel(
+                "Dowload images", DownloadImagesCommand);
+            DownloadImageCommandGroup = new CommandGroupViewModel("Download");
+            DownloadImageCommandGroup.Commands.Add(downloadImageCvm);
+        }
         #endregion
 
         #region events

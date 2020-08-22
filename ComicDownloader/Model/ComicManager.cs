@@ -61,26 +61,6 @@ namespace ComicDownloader.Model
         public ObservableCollection<ComicEditor> ComicEditors { get; private set; }
         public ComicCreator ComicCreator { get; private set; }
 
-        private bool downloadComicData;
-        /// <summary>
-        /// Set to true if you want to download information of comic photos
-        /// </summary>
-        public bool DownloadComicData
-        {
-            get { return downloadComicData; }
-            set { SetProperty(ref downloadComicData, value); }
-        }
-
-        private bool downloadComicPhoto;
-        /// <summary>
-        /// Set to true if you want to download actual comic photos
-        /// </summary>
-        public bool DownloadComicPhoto
-        {
-            get { return downloadComicPhoto; }
-            set { SetProperty(ref downloadComicPhoto, value); }
-        }
-
         private bool downloadRunning;
         /// <summary>
         /// Indicates if information or image download is ongoing.
@@ -156,28 +136,12 @@ namespace ComicDownloader.Model
 
         public async Task DownloadAll()
         {
-            if (!InitializeDownload())
-            {
-                return;
-            }
-            if (DownloadComicData)
-            {
-                CreateComicWorkItems(ComicsCollection.GetAllTargetItems());
-            }
-            await Download();
+            await DownloadInfo(ComicsCollection.GetAllTargetItems());
         }
 
         public async Task DownloadChecked()
         {
-            if (!InitializeDownload())
-            {
-                return;
-            }
-            if (DownloadComicData)
-            {
-                CreateComicWorkItems(ComicsCollection.GetCheckedTargetItems());
-            }
-            await Download();
+            await DownloadInfo(ComicsCollection.GetCheckedTargetItems());
         }
 
         public async Task DownloadImages()
@@ -219,31 +183,15 @@ namespace ComicDownloader.Model
             }
         }
 
-        private async Task Download()
+        private async Task DownloadInfo(IEnumerable<Comic> comicsToDownload)
         {
-            if (DownloadComicData)
+            if (!InitializeDownload())
             {
-                //Download information
-                await Crawl();
+                return;
             }
-
-            //There are two options:
-            //1. Download information AND images
-            //2. Download only images
-
-            //In option one, information download must be succesfull 
-            //until images can be dowloaded
-            if ((DownloadComicData && DownloadComicPhoto && crawlSucceeded) ||
-                (!DownloadComicData && DownloadComicPhoto))
-            {
-                //Download images
-                await DownloadPhotos();
-                if (photoDownloadSucceeded)
-                {
-                    //Update image data to repository
-                    await UpdateWorkPhotosToRepository();
-                }
-            }
+            CreateComicWorkItems(comicsToDownload);
+            //Download information
+            await Crawl();
             DownloadRunning = false;
         }
 

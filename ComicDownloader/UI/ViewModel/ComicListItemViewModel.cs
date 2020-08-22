@@ -8,8 +8,6 @@ namespace ComicDownloader.UI.ViewModel
         public ComicListItemViewModel(ISelectionItem<Comic> comic)
             : base(comic)
         {
-            //CLEAN: this.comic = comic.Target;
-            //CLEAN: this.comic.PropertyChanged += OnComicPropertyChanged;
             item.Target.PropertyChanged += OnComicPropertyChanged;
         }
 
@@ -24,8 +22,6 @@ namespace ComicDownloader.UI.ViewModel
                 OnPropertyChanged(nameof(DisplayText));
             }
         }
-
-        //CLEAN: private readonly Comic comic;
 
         public string DisplayText => item.Target.DisplayText;
 

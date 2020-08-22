@@ -45,8 +45,8 @@ namespace ComicDownloader.UI.ViewModel
             {
                 tab.Dispose();
                 tab.CloseRequested -= OnTabCloseRequested;
-                tabs.Remove(tab);
             }
+            tabs.Clear();
             SelectedTab = null;
         }
         #endregion
@@ -72,17 +72,6 @@ namespace ComicDownloader.UI.ViewModel
                     }
                     break;
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                    //TODO: tabin sulkeminen/poisto, selected tab
-                    //if (e.OldItems != null)
-                    //{
-                    //    foreach (Logger item in e.OldItems)
-                    //    {
-                    //        if (logTabs.ContainsKey(item))
-                    //        {
-                    //            Tabs.Remove(logTabs[item].Item2);
-                    //        }
-                    //    }
-                    //}
                     break;
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                     break;
@@ -105,7 +94,6 @@ namespace ComicDownloader.UI.ViewModel
                 tab.CloseRequested -= OnTabCloseRequested;
                 tabs.Remove(tab);
             }
-            //TODO: Mikä on nyt selected tab?
         }
         #endregion
     }

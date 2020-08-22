@@ -9,47 +9,47 @@ namespace ComicDownloader.UI.ViewModel
         #region constructors
         public ComicPhotoListItemViewModel(ISelectionItem<ComicPhoto> photo) : base(photo)
         {
-            this.photo = photo.Target;
-            this.photo.PropertyChanged += OnComicPropertyChanged;
+            Photo = photo.Target;
+            Photo.PropertyChanged += OnComicPropertyChanged;
         }
         #endregion
 
         #region properties
-        private readonly ComicPhoto photo;
+        public readonly ComicPhoto Photo;
 
         public string Comic
         {
-            get { return photo.Parent.Name; }
+            get { return Photo.Parent.Name; }
         }
 
         public string PublishDate
         {
-            get { return photo.PublishDate.ToString("dd.MM.yyyy"); }
+            get { return Photo.PublishDate.ToString("dd.MM.yyyy"); }
         }
 
         public string DownloadDate
         {
-            get { return photo.DownloadDate.ToString("dd.MM.yyyy"); }
+            get { return Photo.DownloadDate.ToString("dd.MM.yyyy"); }
         }
 
         public string Status
         {
-            get { return photo.Status; }
+            get { return Photo.Status; }
         }
 
         public string AbsoluteFilePath
         {
-            get { return photo.AbsoluteFilePath; }
+            get { return Photo.AbsoluteFilePath; }
         }
 
         public string Url
         {
-            get { return photo.Url; }
+            get { return Photo.Url; }
         }
 
         public string SortByComicNameAndPublishDate
         {
-            get { return $"{ photo.DisplayText }"; }
+            get { return $"{ Photo.DisplayText }"; }
         }
         #endregion
 
@@ -57,7 +57,7 @@ namespace ComicDownloader.UI.ViewModel
         public override void Dispose()
         {
             base.Dispose();
-            photo.PropertyChanged -= OnComicPropertyChanged;
+            Photo.PropertyChanged -= OnComicPropertyChanged;
         }
         #endregion
 

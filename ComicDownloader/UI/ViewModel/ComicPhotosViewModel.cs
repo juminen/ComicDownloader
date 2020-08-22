@@ -32,13 +32,13 @@ namespace ComicDownloader.UI.ViewModel
         {
             List<CommandViewModel> actionsList = new List<CommandViewModel>();
 
-            RelayCommand createNewRelay =
+            RelayCommand addCheckedRelay =
                 new RelayCommand(
                     param => manager.AddCheckedPhotosToWorkPhotos(),
                     param => !manager.DownloadRunning && manager.PhotosCollection.CheckedItems.Count > 0);
-            CommandViewModel createNewCvm =
-                new CommandViewModel("Add checked to work items", createNewRelay);
-            actionsList.Add(createNewCvm);
+            CommandViewModel addCheckedCvm =
+                new CommandViewModel("Add checked to work items", addCheckedRelay);
+            actionsList.Add(addCheckedCvm);
 
             CommandGroupViewModel group = new CommandGroupViewModel("Actions");
             foreach (CommandViewModel item in actionsList)

@@ -13,18 +13,10 @@
             Template="{StaticResource HeaderControlBorderGridTemplate}">
             <HeaderedContentControl.Header>
                 <Label
-                    Content="Download" />
+                    Content="Download infos" />
             </HeaderedContentControl.Header>
             <HeaderedContentControl.Content>
                 <StackPanel>
-                    <CheckBox
-                        Content="Comic infos"
-                        IsChecked="{Binding DownloadComicInfos, Mode=TwoWay, 
-                                        UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox
-                        Content="Image files"
-                        IsChecked="{Binding DownloadImageFiles, Mode=TwoWay, 
-                                        UpdateSourceTrigger=PropertyChanged}" />
                     <Button
                         Content="Download all"
                         Command="{Binding DownloadAllCommand}" />
