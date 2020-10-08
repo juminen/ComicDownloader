@@ -1,10 +1,8 @@
 ﻿using ComicDownloader.Model;
 using JMI.General;
 using JMI.General.Selections;
-using JMI.General.Sorting;
 using JMI.General.VM.Selections;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -121,7 +119,10 @@ namespace ComicDownloader.UI.ViewModel
         private void SetSorting()
         {
             ClearSorting();
-            AllItems.SortDescriptions.Add(new SortDescription(nameof(ComicPhotoListItemViewModel.SortByComicNameAndPublishDate), ListSortDirection.Ascending));
+            AllItems.SortDescriptions.Add(
+                new SortDescription(
+                    nameof(ComicPhotoListItemViewModel.SortByComicNameAndPublishDate),
+                    ListSortDirection.Ascending));
         }
 
         private void BuildFilterLists()
@@ -216,7 +217,7 @@ namespace ComicDownloader.UI.ViewModel
                 }
             }
             //start date is set and end date is empty
-            else if (FilterPublishDateStart.HasValue && 
+            else if (FilterPublishDateStart.HasValue &&
                 !FilterPublishDateEnd.HasValue)
             {
                 if (photo.PublishDate >= FilterPublishDateStart.Value)
@@ -269,27 +270,5 @@ namespace ComicDownloader.UI.ViewModel
             BuildFilterLists();
         }
         #endregion
-
-
-
-
-
-        //TODO: poista
-        private class ComicSorting : IComparer
-        {
-            public int Compare(object x, object y)
-            {
-                if (!(x is ComicPhotoListItemViewModel item1))
-                {
-                    return 0;
-                }
-                if (!(y is ComicPhotoListItemViewModel item2))
-                {
-                    return 0;
-                }
-                AlphanumComparatorFast comp = new AlphanumComparatorFast();
-                return comp.Compare(item1.Comic, item2.Comic);
-            }
-        }
     }
 }

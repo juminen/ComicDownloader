@@ -11,6 +11,8 @@ namespace ComicDownloader
     /// </summary>
     public partial class App : Application
     {
+        ApplicationMainViewModel vm = new ApplicationMainViewModel();
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -30,7 +32,7 @@ namespace ComicDownloader
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
-            //TODO: pääikkunan asetuksien tallennus muistiin
+            vm.SaveSettings();
         }
 
         private void SetRegionalSettings()
@@ -48,7 +50,6 @@ namespace ComicDownloader
 
         private void ShowMainView()
         {
-            ApplicationMainViewModel vm = new ApplicationMainViewModel();
             ApplicationMainView view = new ApplicationMainView()
             {
                 DataContext = vm

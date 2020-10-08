@@ -19,8 +19,6 @@ namespace ComicDownloader.UI.ViewModel
             SavingLocationPicker = DefaultPickers.DirectoryPicker;
             Title = "Create new comic";
             AllowClose = true;
-            //TODO: poista testauksen jälkeen
-            SavingLocationPicker.SelectedPath = @"F:\Kuvat\0_testi\testi";
         }
         #endregion
 

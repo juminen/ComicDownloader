@@ -5,7 +5,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ComicDownloader.UI.View"
-    xmlns:pic="clr-namespace:JMI.General.View.WPF.IO.Picker;assembly=JMI.General.View.WPF"
     xmlns:log="clr-namespace:JMI.General.View.WPF.Logging;assembly=JMI.General.View.WPF"
     mc:Ignorable="d"
     Title="{Binding WindowTitle}"
@@ -16,16 +15,12 @@
     WindowState="{Binding WindowState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
     <Grid>
         <Grid.RowDefinitions>
-            <!--<RowDefinition
-                Height="{Binding RowHeightTop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
             <RowDefinition
-                Height="*" />
+                Height="{Binding GridRowHeightTop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <RowDefinition
                 Height="auto" />
-            <!--<RowDefinition
-                Height="{Binding RowHeightBottom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
             <RowDefinition
-                Height="0.5*" />
+                Height="{Binding GridRowHeightBottom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid.RowDefinitions>
         <Grid
             Grid.Row="0">
@@ -41,9 +36,6 @@
             <ContentControl
                 Grid.Row="1"
                 Content="{Binding Workspace, Mode=OneWay}" />
-            <!--<ContentControl
-            Grid.Row="0"
-            Content="{Binding CurrentView}" />-->
         </Grid>
         <GridSplitter
             Grid.Row="1"

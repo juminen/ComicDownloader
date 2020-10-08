@@ -35,7 +35,7 @@ namespace ComicDownloader.Model.DtoConvert
         {
             ComicDto dto = new ComicDto
             {
-                UniqueIdentifier = item.Identifier.GetGuid(),
+                UniqueIdentifier = item.Identifier.GetIdObject(),
                 Name = item.Name,
                 StartUrl = item.StartUrl,
                 LastDownloadDate = item.LastDownloadDate,

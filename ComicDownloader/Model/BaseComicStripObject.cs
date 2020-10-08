@@ -11,19 +11,21 @@ namespace ComicDownloader.Model
         #region constructors
         public BaseComicStripObject()
         {
-            Identifier = new Identifier();
+            Identifier = new GuidIdentifier();
         }
 
         public BaseComicStripObject(Guid guid)
         {
-            Identifier = new Identifier(guid);
+            Identifier = new GuidIdentifier(guid);
         }
         #endregion
 
         #region properties
-        public IIdentifier Identifier { get; }
+        public IGuidIdentifier Identifier { get; }
 
         public abstract string DisplayText { get; }
+
+        IIdentifier ISelectionTarget.Identifier => Identifier;
         #endregion
 
         #region methods

@@ -26,11 +26,6 @@ namespace ComicDownloader.Model
             DownloadLogs = new ObservableCollection<DownloadLogger>();
             ComicEditors = new ObservableCollection<ComicEditor>();
             ComicCreator = new ComicCreator(repository);
-            //LoadSettings();
-            //TODO: testiä varten
-            //GetComicsFromDatabase();
-            //TODO: testiä varten
-            //ComicsCollection.SelectAll();
         }
         #endregion
 
