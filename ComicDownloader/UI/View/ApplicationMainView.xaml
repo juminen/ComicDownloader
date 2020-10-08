@@ -16,11 +16,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition
-                Height="{Binding GridRowHeightTop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Height="{Binding RowHeightTop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <RowDefinition
                 Height="auto" />
             <RowDefinition
-                Height="{Binding GridRowHeightBottom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Height="{Binding RowHeightBottom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid.RowDefinitions>
         <Grid
             Grid.Row="0">
